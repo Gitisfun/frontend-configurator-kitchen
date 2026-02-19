@@ -22,7 +22,7 @@
 <style scoped>
 .intro {
   background-color: var(--color-surface);
-  padding: var(--intro-padding-y) var(--intro-padding-x);
+  padding: var(--section-padding-y) var(--intro-padding-x);
 }
 
 .intro__inner {
@@ -66,7 +66,7 @@
 
 @media (min-width: 768px) {
   .intro {
-    padding: var(--intro-padding-y-desktop) var(--intro-padding-x-desktop);
+    padding: var(--section-padding-y-desktop) var(--intro-padding-x-desktop);
   }
 
   .intro__description {

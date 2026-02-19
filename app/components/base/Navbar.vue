@@ -14,6 +14,15 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
 
+interface Props {
+  /** When true, use primary link color and solid bar (for pages with white background). */
+  lightPage?: boolean;
+}
+
+const props = withDefaults(defineProps<Props>(), {
+  lightPage: false,
+});
+
 const SCROLL_THRESHOLD = 80;
 const scrollProgress = ref(0);
 
@@ -33,7 +42,7 @@ const WHITE: [number, number, number] = [255, 255, 255];
 const PRIMARY: [number, number, number] = [27, 58, 92];
 
 const navbarStyle = computed(() => {
-  const p = scrollProgress.value;
+  const p = props.lightPage ? 1 : scrollProgress.value;
   const linkColor = lerpColor(WHITE, PRIMARY, p);
   return {
     backgroundColor: `rgba(255, 255, 255, ${0.95 * p})`,

@@ -5,16 +5,10 @@
     </div>
     <div class="hero-overlay" />
     <div class="hero-content">
-      <BaseHeader size="big" as="h1" align="center" color="light">
-        Customize Your Cabinet
-      </BaseHeader>
-      <BaseParagraph size="large" align="center" color="light" max-width="800px">
-        Select colors and handle styles to create your perfect kitchen piece.
-      </BaseParagraph>
+      <BaseHeader size="big" as="h1" align="center" color="light"> Customize Your Cabinet </BaseHeader>
+      <BaseParagraph size="large" align="center" color="light" max-width="800px"> Select colors and handle styles to create your perfect kitchen piece. </BaseParagraph>
       <div class="button-container">
-        <BaseButton variant="secondary" size="large" rounded>
-          Continue
-        </BaseButton>
+        <BaseButton variant="primary" size="medium" rounded> Continue </BaseButton>
       </div>
     </div>
   </div>

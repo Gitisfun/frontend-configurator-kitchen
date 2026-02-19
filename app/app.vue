@@ -1,10 +1,21 @@
 <template>
   <div class="app-wrapper">
-    <BaseNavbar />
+    <BaseNavbar :light-page="isLightPage" />
     <NuxtPage />
     <BaseFooter />
   </div>
 </template>
+
+<script setup lang="ts">
+import { computed } from 'vue';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+
+const LIGHT_PAGE_PATHS = ['/configurator', '/about', '/contact'];
+
+const isLightPage = computed(() => LIGHT_PAGE_PATHS.some((path) => route.path === path || route.path.startsWith(path + '/')));
+</script>
 
 <style>
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');

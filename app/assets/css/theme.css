@@ -59,6 +59,41 @@
   --link-font-size-small: 14px;
   --link-font-size-medium: 16px;
 
+  /* ---------- Picker ---------- */
+  --picker-bg: var(--color-surface);
+  --picker-bg-hover: var(--color-surface-hover);
+  --picker-border: #e0dcd7;
+  --picker-label-color: var(--color-text-primary);
+  --picker-value-color: var(--color-text-muted);
+  --picker-padding-x: 1rem;
+  --picker-padding-y: 0.875rem;
+  --picker-padding-x-desktop: 1.25rem;
+  --picker-padding-y-desktop: 1rem;
+  --picker-label-font-size: 13px;
+  --picker-value-font-size: 14px;
+  --picker-label-font-size-desktop: 14px;
+  --picker-value-font-size-desktop: 15px;
+  --picker-swatch-size: 24px;
+  --picker-swatch-size-desktop: 26px;
+  --picker-image-size: 36px;
+  --picker-image-size-desktop: 40px;
+  --picker-gap: 0.75rem;
+  --picker-radius: var(--button-radius-rounded);
+  --picker-focus-ring: var(--button-focus-ring);
+  --picker-focus-offset: var(--button-focus-offset);
+
+  /* ---------- Panel ---------- */
+  --panel-z-index: 1000;
+  --panel-overlay-bg: rgba(27, 58, 92, 0.4);
+  --panel-bg: var(--color-surface);
+  --panel-shadow: -4px 0 24px rgba(0, 0, 0, 0.12);
+  --panel-border-color: #e8e6e3;
+  --panel-header-padding: 1.25rem 1.5rem;
+  --panel-title-font-size: 1.25rem;
+  --panel-body-padding: 1.5rem;
+  --panel-footer-padding: 1rem 1.5rem;
+  --panel-radius: 12px;
+
   /* ---------- Button ---------- */
   --button-primary-bg: var(--color-brand);
   --button-primary-bg-hover: var(--color-brand-hover);
@@ -165,11 +200,17 @@
   --footer-gap: 2rem;
   --footer-gap-desktop: 3rem;
 
+  /* ---------- Section spacing (equal top/bottom for all sections) ---------- */
+  --section-padding-y: 3rem;
+  --section-padding-y-desktop: 4rem;
+
   /* ---------- Intro (configurator) ---------- */
   --intro-max-width: 1200px;
   --intro-content-max-width: 520px;
-  --intro-padding-y: 5.5rem;
   --intro-padding-x: 1.5rem;
-  --intro-padding-y-desktop: 8rem;
   --intro-padding-x-desktop: 4rem;
+  --intro-padding-y: var(--section-padding-y);
+  --intro-padding-y-desktop: var(--section-padding-y-desktop);
+  --intro-section-gap: 2rem;
+  --intro-section-gap-desktop: 2.5rem;
 }
