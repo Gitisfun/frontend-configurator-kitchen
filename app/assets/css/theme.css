@@ -1,0 +1,175 @@
+/**
+ * Theme variables for DE KEUKEN FABRIEK
+ * Override these in :root to customize the design system.
+ */
+
+:root {
+  /* ---------- Colors ---------- */
+  --color-text-primary: #1B3A5C;
+  --color-text-muted: #4a6a8a;
+  --color-text-muted-strong: #2d5070;
+  --color-text-muted-light: #7a9ab5;
+  --color-text-light: #ffffff;
+
+  --color-brand: #00A651;
+  --color-brand-hover: #008c44;
+
+  --color-brand-secondary: #1B3A5C;
+  --color-brand-secondary-hover: #152e4a;
+
+  --color-border: #1B3A5C;
+  --color-surface: #ffffff;
+  --color-surface-hover: #f0f5f2;
+
+  /* ---------- Typography ---------- */
+  --font-sans: 'DM Sans', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+
+  --letter-spacing-tight: 0.01em;
+  --letter-spacing-body: 0.02em;
+  --letter-spacing-wide: 0.3px;
+  --letter-spacing-button: 0.5px;
+
+  --line-height-heading: 1.3;
+  --line-height-body: 1.7;
+
+  --font-weight-medium: 500;
+
+  /* ---------- Breakpoint ---------- */
+  --breakpoint-md: 768px;
+
+  /* ---------- Header ---------- */
+  --header-size-big: 40px;
+  --header-size-big-desktop: 56px;
+  --header-size-medium: 30px;
+  --header-size-medium-desktop: 40px;
+  --header-size-small: 22px;
+  --header-size-small-desktop: 28px;
+
+  /* ---------- Paragraph ---------- */
+  --paragraph-size-small: 14px;
+  --paragraph-size-small-desktop: 15px;
+  --paragraph-size-medium: 16px;
+  --paragraph-size-medium-desktop: 18px;
+  --paragraph-size-large: 18px;
+  --paragraph-size-large-desktop: 20px;
+  --paragraph-margin-bottom: 1rem;
+
+  /* ---------- Link ---------- */
+  --link-font-size-small: 14px;
+  --link-font-size-medium: 16px;
+
+  /* ---------- Button ---------- */
+  --button-primary-bg: var(--color-brand);
+  --button-primary-bg-hover: var(--color-brand-hover);
+  --button-primary-color: var(--color-text-light);
+
+  --button-outlined-bg: var(--color-surface);
+  --button-outlined-color: var(--color-border);
+  --button-outlined-border: var(--color-border);
+  --button-outlined-hover-bg: var(--color-surface-hover);
+
+  --button-light-bg: #ffffff;
+  --button-light-color: #1a1a1a;
+  --button-light-hover-bg: #f0f0f0;
+
+  --button-dark-bg: #1a1a1a;
+  --button-dark-color: #ffffff;
+  --button-dark-hover-bg: #333333;
+
+  --button-focus-ring: 2px solid var(--color-border);
+  --button-focus-offset: 2px;
+
+  --button-radius: 0;
+  --button-radius-rounded: 8px;
+
+  --button-disabled-opacity: 0.5;
+
+  --button-padding-x-small: 1rem;
+  --button-padding-x-medium: 1.5rem;
+  --button-padding-x-large: 2rem;
+  --button-padding-y-small: 0.5rem;
+  --button-padding-y-medium: 0.75rem;
+  --button-padding-y-large: 1rem;
+
+  --button-font-size-small: 14px;
+  --button-font-size-medium: 16px;
+  --button-font-size-large: 18px;
+  --button-font-size-small-desktop: 15px;
+  --button-font-size-medium-desktop: 17px;
+  --button-font-size-large-desktop: 19px;
+
+  --button-min-height-small: 36px;
+  --button-min-height-medium: 44px;
+  --button-min-height-large: 52px;
+  --button-min-height-small-desktop: 38px;
+  --button-min-height-medium-desktop: 46px;
+  --button-min-height-large-desktop: 54px;
+
+  --button-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  --button-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
+
+  --button-padding-x-small-desktop: 1.25rem;
+  --button-padding-x-medium-desktop: 1.75rem;
+  --button-padding-x-large-desktop: 2.25rem;
+  --button-padding-y-small-desktop: 0.625rem;
+  --button-padding-y-medium-desktop: 0.875rem;
+  --button-padding-y-large-desktop: 1.125rem;
+
+  /* ---------- Navbar ---------- */
+  --navbar-bg: transparent;
+  --navbar-blur: 0;
+  --navbar-shadow: none;
+
+  --navbar-bg-scrolled: rgba(255, 255, 255, 0.95);
+  --navbar-blur-scrolled: 10px;
+  --navbar-shadow-scrolled: 0 2px 10px rgba(0, 0, 0, 0.05);
+
+  --navbar-padding-y: 0.75rem;
+  --navbar-padding-x: 3rem;
+  --navbar-padding-y-desktop: 1rem;
+  --navbar-padding-x-desktop: 4rem;
+
+  --navbar-logo-height: 52px;
+
+  --navbar-link-color: var(--color-text-primary);
+  --navbar-link-color-active: var(--color-brand);
+  --navbar-link-font-size: 15px;
+  --navbar-link-font-size-desktop: 16px;
+  --navbar-link-underline-height: 2px;
+  --navbar-gap: 3rem;
+  --navbar-gap-desktop: 3.5rem;
+
+  /* ---------- Footer ---------- */
+  --footer-bg: var(--color-brand-secondary);
+  --footer-text-color: #ffffff;
+  --footer-text-muted: rgba(255, 255, 255, 0.65);
+  --footer-heading-color: #ffffff;
+  --footer-border-color: rgba(255, 255, 255, 0.15);
+  --footer-max-width: 1200px;
+
+  --footer-logo-height: 44px;
+
+  --footer-heading-size: 18px;
+  --footer-text-size: 14px;
+  --footer-small-text-size: 13px;
+
+  --footer-padding-y: 2.5rem;
+  --footer-padding-x: 1.5rem;
+  --footer-padding-y-desktop: 3.5rem;
+  --footer-padding-x-desktop: 4rem;
+
+  --footer-bottom-padding-y: 1.5rem;
+  --footer-bottom-padding-y-desktop: 2rem;
+
+  --footer-gap: 2rem;
+  --footer-gap-desktop: 3rem;
+
+  /* ---------- Intro (configurator) ---------- */
+  --intro-max-width: 1200px;
+  --intro-content-max-width: 520px;
+  --intro-padding-y: 5.5rem;
+  --intro-padding-x: 1.5rem;
+  --intro-padding-y-desktop: 8rem;
+  --intro-padding-x-desktop: 4rem;
+}
