@@ -165,7 +165,10 @@
   --navbar-padding-y-desktop: 1rem;
   --navbar-padding-x-desktop: 4rem;
 
-  --navbar-logo-height: 52px;
+  --navbar-logo-height: 60px;
+  /** Use for padding-top on pages with fixed navbar so content starts below the bar */
+  --navbar-height: calc(2 * var(--navbar-padding-y) + var(--navbar-logo-height));
+  --navbar-height-desktop: calc(2 * var(--navbar-padding-y-desktop) + var(--navbar-logo-height));
 
   --navbar-link-color: var(--color-text-primary);
   --navbar-link-color-active: var(--color-brand);

@@ -1,7 +1,7 @@
 <template>
   <div class="configurator-page">
     <header class="configurator-header">
-      <BaseHeader size="big" as="h1" align="center" color="primary" class="configurator-header__title"> Customize Your Closet </BaseHeader>
+      <BaseHeader size="big" as="h1" align="center" color="primary" class="configurator-header__title"> Customize Your Cabinet </BaseHeader>
       <BaseParagraph size="medium" align="center" color="primary" class="configurator-header__description"> Select colors and handle styles to create your perfect kitchen piece. </BaseParagraph>
     </header>
 
@@ -13,32 +13,20 @@
         </div>
         <div class="configurator-main__pickers">
           <BasePicker label="Plinth Color" type="color" :value="plinthColor" @click="onPickerClick('plinth')" />
-          <BasePicker label="Door Color" type="color" value="#ffffff" @click="onPickerClick('door')" />
-          <BasePicker label="Side Panel" type="color" value="#c4b8a8" @click="onPickerClick('sidePanel')" />
-          <BasePicker label="Handle Type" type="text" value="Brass Bar" @click="onPickerClick('handle')" />
+          <BasePicker label="Door Color" type="color" :value="doorColor" @click="onPickerClick('door')" />
+          <BasePicker label="Side Panel" type="color" :value="sidePanelColor" @click="onPickerClick('sidePanel')" />
+          <BasePicker label="Handle Type" type="text" :value="handleType" @click="onPickerClick('handle')" />
         </div>
         <div class="configurator-main__actions">
-          <BaseButton variant="outlined" size="medium" rounded @click="onBack"> Back </BaseButton>
-          <BaseButton variant="primary" size="medium" rounded @click="onNext"> Next </BaseButton>
+          <BaseButtons back-label="Back" next-label="Next" @back="onBack" @next="onNext" />
         </div>
       </div>
     </section>
 
-    <BasePanel v-model="plinthPanelOpen" title="Plinth Color" width="400px">
-      <p class="configurator-panel__intro">Choose a plinth color for your cabinet.</p>
-      <div class="configurator-panel__colors">
-        <button
-          v-for="c in plinthColors"
-          :key="c"
-          type="button"
-          class="configurator-panel__swatch"
-          :class="{ 'configurator-panel__swatch--selected': plinthColor === c }"
-          :style="{ backgroundColor: c }"
-          :aria-label="`Select plinth color ${c}`"
-          @click="plinthColor = c; plinthPanelOpen = false"
-        />
-      </div>
-    </BasePanel>
+    <PanelsPlinth v-model="plinthPanelOpen" v-model:color="plinthColor" />
+    <PanelsFront v-model="doorPanelOpen" v-model:color="doorColor" />
+    <PanelsSide v-model="sidePanelOpen" v-model:color="sidePanelColor" />
+    <PanelsHandle v-model="handlePanelOpen" v-model:value="handleType" />
   </div>
 </template>
 
@@ -47,11 +35,22 @@ import { ref } from 'vue';
 
 const plinthPanelOpen = ref(false);
 const plinthColor = ref('#e8e4df');
-const plinthColors = ['#e8e4df', '#ffffff', '#c4b8a8', '#2d2d2d', '#8b7355'];
+const doorPanelOpen = ref(false);
+const doorColor = ref('#ffffff');
+const sidePanelOpen = ref(false);
+const sidePanelColor = ref('#c4b8a8');
+const handlePanelOpen = ref(false);
+const handleType = ref('Knop 77');
 
 function onPickerClick(key: string) {
   if (key === 'plinth') {
     plinthPanelOpen.value = true;
+  } else if (key === 'door') {
+    doorPanelOpen.value = true;
+  } else if (key === 'sidePanel') {
+    sidePanelOpen.value = true;
+  } else if (key === 'handle') {
+    handlePanelOpen.value = true;
   } else {
     console.log('Picker clicked:', key);
   }
@@ -71,11 +70,14 @@ function onNext() {
 <style scoped>
 .configurator-page {
   background-color: var(--color-surface);
+  padding-top: calc(var(--navbar-height) + 1.5rem);
   padding-bottom: var(--intro-padding-y);
+  padding-left: var(--intro-padding-x);
+  padding-right: var(--intro-padding-x);
 }
 
 .configurator-header {
-  padding: var(--intro-padding-y) var(--intro-padding-x) 2rem;
+  padding: 0 0 2rem;
   text-align: center;
 }
 
@@ -91,7 +93,7 @@ function onNext() {
 }
 
 .configurator-main {
-  padding: 0 var(--intro-padding-x);
+  padding: 0;
 }
 
 .configurator-main__inner {
@@ -144,15 +146,18 @@ function onNext() {
 
 @media (min-width: 768px) {
   .configurator-page {
+    padding-top: calc(var(--navbar-height-desktop) + 2rem);
     padding-bottom: var(--intro-padding-y-desktop);
+    padding-left: var(--intro-padding-x-desktop);
+    padding-right: var(--intro-padding-x-desktop);
   }
 
   .configurator-header {
-    padding: var(--intro-padding-y-desktop) var(--intro-padding-x-desktop) 3rem;
+    padding: 0 0 3rem;
   }
 
   .configurator-main {
-    padding: 0 var(--intro-padding-x-desktop);
+    padding: 0;
   }
 
   .configurator-main__inner {
@@ -180,36 +185,5 @@ function onNext() {
     margin-top: 2.5rem;
     padding-top: 2.5rem;
   }
-}
-
-.configurator-panel__intro {
-  margin: 0 0 1rem;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  color: var(--color-text);
-}
-
-.configurator-panel__colors {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.configurator-panel__swatch {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--picker-radius);
-  border: 2px solid transparent;
-  cursor: pointer;
-  transition: border-color 0.2s, transform 0.15s;
-}
-
-.configurator-panel__swatch:hover {
-  transform: scale(1.05);
-}
-
-.configurator-panel__swatch--selected {
-  border-color: var(--color-primary, #1a1a1a);
-  box-shadow: 0 0 0 1px var(--color-primary, #1a1a1a);
 }
 </style>

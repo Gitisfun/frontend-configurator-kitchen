@@ -7,6 +7,7 @@
       <NuxtLink to="/" class="nav-link">Home</NuxtLink>
       <NuxtLink to="/about" class="nav-link">About</NuxtLink>
       <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
+      <BaseCart :item-count="cartItemCount" :total="cartTotal" />
     </div>
   </nav>
 </template>
@@ -22,6 +23,10 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   lightPage: false,
 });
+
+/** Hardcoded for now; replace with cart store/composable later */
+const cartItemCount = ref(2);
+const cartTotal = ref(230);
 
 const SCROLL_THRESHOLD = 80;
 const scrollProgress = ref(0);
