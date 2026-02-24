@@ -8,14 +8,13 @@
     <section class="configurator-main">
       <div class="configurator-main__inner">
         <div class="configurator-main__media">
-          <img src="/placeholder.png" alt="Kitchen cabinet preview" class="configurator-main__image" />
-          <p class="configurator-main__hint">Drag to rotate • Colors update live</p>
+          <div v-if="canvasMounted" ref="canvasContainerRef" class="configurator-main__canvas-wrap" aria-hidden="true" />
         </div>
         <div class="configurator-main__pickers">
-          <BasePicker label="Plinth Color" type="color" :value="plinthColor" @click="onPickerClick('plinth')" />
-          <BasePicker label="Door Color" type="color" :value="doorColor" @click="onPickerClick('door')" />
-          <BasePicker label="Side Panel" type="color" :value="sidePanelColor" @click="onPickerClick('sidePanel')" />
-          <BasePicker label="Handle Type" type="text" :value="handleType" @click="onPickerClick('handle')" />
+          <BasePicker :label="PICKER_LABEL_FRONT" type="color" :value="frontSelection?.image ?? null" :error="showPickerErrors && !frontSelection" error-message="Please select a front color" @click="onPickerClick(PICKER_KEY_FRONT)" />
+          <BasePicker :label="PICKER_LABEL_SIDE_PANEL" type="color" :value="sideSelection?.image ?? null" :error="showPickerErrors && !sideSelection" error-message="Please select a side panel" @click="onPickerClick(PICKER_KEY_SIDE_PANEL)" />
+          <BasePicker :label="PICKER_LABEL_PLINTH" type="color" :value="plinthSelection?.image ?? null" :error="showPickerErrors && !plinthSelection" error-message="Please select a plinth color" @click="onPickerClick(PICKER_KEY_PLINTH)" />
+          <BasePicker :label="PICKER_LABEL_HANDLE" type="text" :value="handleSelection?.title ?? null" :error="showPickerErrors && !handleSelection" error-message="Please select a handle type" @click="onPickerClick(PICKER_KEY_HANDLE)" />
         </div>
         <div class="configurator-main__actions">
           <BaseButtons back-label="Back" next-label="Next" @back="onBack" @next="onNext" />
@@ -23,38 +22,33 @@
       </div>
     </section>
 
-    <PanelsPlinth v-model="plinthPanelOpen" v-model:color="plinthColor" />
-    <PanelsFront v-model="doorPanelOpen" v-model:color="doorColor" />
-    <PanelsSide v-model="sidePanelOpen" v-model:color="sidePanelColor" />
-    <PanelsHandle v-model="handlePanelOpen" v-model:value="handleType" />
+    <PanelsPlinth v-model="plinthPanelOpen" v-model:selection="plinthSelection" />
+    <PanelsFront v-model="frontPanelOpen" v-model:selection="frontSelection" />
+    <PanelsSide v-model="sidePanelOpen" v-model:selection="sideSelection" />
+    <PanelsHandle v-model="handlePanelOpen" v-model:selection="handleSelection" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref } from 'vue';
+import { useRouter } from 'vue-router';
+import { useCabinetViewer } from '../../composables/useCabinetViewer';
+import { useConfiguratorState } from '../../composables/useConfiguratorState';
+import { useToast } from '../../composables/useToast';
+import { PICKER_KEY_PLINTH, PICKER_KEY_FRONT, PICKER_KEY_SIDE_PANEL, PICKER_KEY_HANDLE, PICKER_LABEL_PLINTH, PICKER_LABEL_FRONT, PICKER_LABEL_SIDE_PANEL, PICKER_LABEL_HANDLE } from '../../constants/configurator';
 
-const plinthPanelOpen = ref(false);
-const plinthColor = ref('#e8e4df');
-const doorPanelOpen = ref(false);
-const doorColor = ref('#ffffff');
-const sidePanelOpen = ref(false);
-const sidePanelColor = ref('#c4b8a8');
-const handlePanelOpen = ref(false);
-const handleType = ref('Knop 77');
+const router = useRouter();
+const canvasContainerRef = ref<HTMLElement | null>(null);
+const showPickerErrors = ref(false);
+const toast = useToast();
 
-function onPickerClick(key: string) {
-  if (key === 'plinth') {
-    plinthPanelOpen.value = true;
-  } else if (key === 'door') {
-    doorPanelOpen.value = true;
-  } else if (key === 'sidePanel') {
-    sidePanelOpen.value = true;
-  } else if (key === 'handle') {
-    handlePanelOpen.value = true;
-  } else {
-    console.log('Picker clicked:', key);
-  }
-}
+const { plinthPanelOpen, plinthSelection, frontPanelOpen, frontSelection, sidePanelOpen, sideSelection, handlePanelOpen, handleSelection, onPickerClick } = useConfiguratorState();
+
+const { canvasMounted } = useCabinetViewer(canvasContainerRef, {
+  plinthSelection,
+  frontSelection,
+  sideSelection,
+});
 
 function onBack() {
   // TODO: go to previous step or navigate back
@@ -62,8 +56,21 @@ function onBack() {
 }
 
 function onNext() {
-  // TODO: go to next step or submit
-  console.log('Next clicked');
+  const missing: string[] = [];
+  if (!frontSelection.value) missing.push('Front color');
+  if (!sideSelection.value) missing.push('Side panel');
+  if (!plinthSelection.value) missing.push('Plinth color');
+  if (!handleSelection.value) missing.push('Handle type');
+
+  if (missing.length > 0) {
+    showPickerErrors.value = true;
+    toast.warning(`Please fill in the missing options: ${missing.join(', ')}.`, {
+      title: 'Missing required fields',
+    });
+    return;
+  }
+  showPickerErrors.value = false;
+  router.push('/configurator/type');
 }
 </script>
 
@@ -112,13 +119,20 @@ function onNext() {
   gap: 0.75rem;
 }
 
-.configurator-main__image {
+.configurator-main__canvas-wrap {
   width: 100%;
   max-width: 480px;
-  height: auto;
-  display: block;
+  aspect-ratio: 4 / 3;
   border-radius: var(--picker-radius);
+  overflow: hidden;
   background-color: #f5f2ee;
+}
+
+.configurator-main__canvas-wrap :deep(canvas) {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
 }
 
 .configurator-main__hint {
@@ -170,7 +184,7 @@ function onNext() {
     order: 1;
   }
 
-  .configurator-main__image {
+  .configurator-main__canvas-wrap {
     max-width: 100%;
   }
 

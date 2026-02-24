@@ -1,3 +1,18 @@
+<script setup lang="ts">
+import { useRouter } from 'vue-router';
+import { useStepperStore } from '../../../../stores/stepper';
+import { STEP_ONE_OPTIONS } from '../../../constants/dummy';
+
+const router = useRouter();
+const stepper = useStepperStore();
+
+function goToConfigurator(value: string) {
+  stepper.setStepOne(value);
+  stepper.setStep(2);
+  router.push('/configurator');
+}
+</script>
+
 <template>
   <section class="intro">
     <div class="intro__inner">
@@ -5,8 +20,16 @@
         <BaseHeader size="big" as="h1" align="left" color="primary"> stel zelf je keuken samen </BaseHeader>
         <BaseParagraph size="medium" align="left" color="primary" class="intro__description"> maak hier alvast je keuze voor een greeploze kast of een kast met greep en start met samenstellen </BaseParagraph>
         <div class="intro__actions">
-          <BaseButton variant="outlined" size="medium" rounded> kies met greep </BaseButton>
-          <BaseButton variant="outlined" size="medium" rounded> kies greeploos </BaseButton>
+          <BaseButton
+            v-for="option in STEP_ONE_OPTIONS"
+            :key="option.id"
+            variant="outlined"
+            size="medium"
+            rounded
+            @click="goToConfigurator(option.value)"
+          >
+            {{ option.label }}
+          </BaseButton>
         </div>
         <BaseLink to="/help" underline size="small" color="primary" class="intro__help">
           <template #iconLeft>

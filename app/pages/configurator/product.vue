@@ -137,7 +137,7 @@ const price = computed(() => {
 });
 
 function onBack() {
-  router.push('/configurator/subcategories');
+  router.back();
 }
 
 function addToCart() {

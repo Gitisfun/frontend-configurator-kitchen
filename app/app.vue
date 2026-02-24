@@ -3,6 +3,7 @@
     <BaseNavbar :light-page="isLightPage" />
     <NuxtPage />
     <BaseFooter />
+    <BaseToastContainer />
   </div>
 </template>
 

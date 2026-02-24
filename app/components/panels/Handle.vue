@@ -2,11 +2,11 @@
   <BasePanel :model-value="modelValue" title="Handle Type" width="720px" @update:model-value="emit('update:modelValue', $event)">
     <p class="handle-panel__intro">Choose a handle or knob for your cabinet.</p>
     <ul class="handle-panel__list" role="list">
-      <li v-for="item in handleOptions" :key="item.id" class="handle-panel__item">
+      <li v-for="item in HANDLE_OPTIONS" :key="item.id" class="handle-panel__item">
         <ListItem
           :title="item.title"
           :image="item.image"
-          :selected="value === item.title"
+          :selected="selection?.id === item.id"
           @click="selectOption(item)"
         />
       </li>
@@ -15,41 +15,22 @@
 </template>
 
 <script setup lang="ts">
+import { HANDLE_OPTIONS, type HandleOption } from '../../constants/dummy';
+
 interface Props {
   modelValue: boolean;
-  value?: string;
+  selection?: HandleOption | null;
 }
 
-interface HandleOption {
-  id: string;
-  title: string;
-  image: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  value: 'Knop 77',
-});
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
-  'update:value': [value: string];
+  'update:selection': [value: HandleOption];
 }>();
 
-const handleOptions: HandleOption[] = [
-  { id: '77', title: 'Knop 77', image: '/placeholder.png' },
-  { id: '9', title: 'Knop 9', image: '/placeholder.png' },
-  { id: '199', title: 'Knop 199', image: '/placeholder.png' },
-  { id: '141', title: 'Knop 141', image: '/placeholder.png' },
-  { id: '178', title: 'Knop 178', image: '/placeholder.png' },
-  { id: 'brass-bar', title: 'Brass Bar', image: '/placeholder.png' },
-  { id: 'chrome-t', title: 'Chrome T-bar', image: '/placeholder.png' },
-  { id: 'oval-matt', title: 'Oval mat', image: '/placeholder.png' },
-  { id: 'round-polished', title: 'Round polished', image: '/placeholder.png' },
-  { id: 'pull-rail', title: 'Pull rail', image: '/placeholder.png' },
-];
-
 function selectOption(item: HandleOption) {
-  emit('update:value', item.title);
+  emit('update:selection', item);
   emit('update:modelValue', false);
 }
 </script>

@@ -20,6 +20,14 @@
   --color-border: #1B3A5C;
   --color-surface: #ffffff;
   --color-surface-hover: #f0f5f2;
+  --color-error: #c53030;
+  --color-error-muted: #e55353;
+  --color-success: #00A651;
+  --color-success-muted: #e6f5ee;
+  --color-info: #1B3A5C;
+  --color-info-muted: #e8eef4;
+  --color-warning: #b7791f;
+  --color-warning-muted: #faf3e6;
 
   /* ---------- Typography ---------- */
   --font-sans: 'DM Sans', sans-serif;
@@ -73,14 +81,28 @@
   --picker-value-font-size: 14px;
   --picker-label-font-size-desktop: 14px;
   --picker-value-font-size-desktop: 15px;
-  --picker-swatch-size: 24px;
-  --picker-swatch-size-desktop: 26px;
-  --picker-image-size: 36px;
-  --picker-image-size-desktop: 40px;
+  --picker-swatch-size: 20px;
+  --picker-swatch-size-desktop: 22px;
+  --picker-image-size: 20px;
+  --picker-image-size-desktop: 22px;
   --picker-gap: 0.75rem;
   --picker-radius: var(--button-radius-rounded);
   --picker-focus-ring: var(--button-focus-ring);
   --picker-focus-offset: var(--button-focus-offset);
+
+  /* ---------- Toast ---------- */
+  --toast-z-index: 1100;
+  --toast-gap: 0.75rem;
+  --toast-padding-x: 1rem;
+  --toast-padding-y: 0.875rem;
+  --toast-padding-x-desktop: 1.25rem;
+  --toast-padding-y-desktop: 1rem;
+  --toast-radius: var(--button-radius-rounded);
+  --toast-shadow: 0 4px 12px rgba(27, 58, 92, 0.15);
+  --toast-font-size: 14px;
+  --toast-font-size-desktop: 15px;
+  --toast-title-font-size: 13px;
+  --toast-title-font-size-desktop: 14px;
 
   /* ---------- Panel ---------- */
   --panel-z-index: 1000;

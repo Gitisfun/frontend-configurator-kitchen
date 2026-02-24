@@ -1,21 +1,23 @@
 <template>
-  <button type="button" :disabled="disabled" :class="pickerClasses" :aria-label="ariaLabel" @click="handleClick">
-    <span class="picker__label">{{ label }}</span>
-    <span class="picker__value">
-      <slot name="value">
-        <span v-if="type === 'color'" class="picker__swatch" :style="swatchStyle" />
-        <span v-else-if="type === 'text'" class="picker__text">{{ value }}</span>
-        <img v-else-if="type === 'image' && imageSrc" :src="imageSrc" :alt="imageAlt" class="picker__image" />
-      </slot>
-    </span>
-    <span class="picker__chevron">
-      <slot name="iconRight">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-          <path d="M4.5 3L8 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-      </slot>
-    </span>
-  </button>
+  <div class="picker-wrap">
+    <button type="button" :disabled="disabled" :class="pickerClasses" :aria-label="ariaLabel" :aria-invalid="error" @click="handleClick">
+      <span class="picker__label">{{ label }}</span>
+      <span class="picker__value">
+        <slot name="value">
+          <img v-if="showAsImage" :src="displayImageSrc" :alt="displayImageAlt" class="picker__image" />
+          <span v-else-if="type === 'color'" class="picker__swatch" :style="swatchStyle" />
+          <span v-else-if="type === 'text'" class="picker__text">{{ value }}</span>
+        </slot>
+      </span>
+      <span class="picker__chevron">
+        <slot name="iconRight">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M4.5 3L8 6L4.5 9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </slot>
+      </span>
+    </button>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -26,10 +28,14 @@ interface Props {
   label: string;
   /** Type of value display */
   type?: 'color' | 'text' | 'image';
-  /** Value: hex string for color, text for text, URL for image. For image, can pass object { src, alt? } */
-  value?: string | { src: string; alt?: string };
+  /** Value: hex string for color, text for text, URL for image. For image, can pass object { src, alt? }. Null/undefined = empty. */
+  value?: string | { src: string; alt?: string } | null;
   /** Visual selected state (e.g. brand border) */
   selected?: boolean;
+  /** Error state (e.g. validation failed, required empty) */
+  error?: boolean;
+  /** Message shown below the picker when error is true */
+  errorMessage?: string;
   disabled?: boolean;
   fullWidth?: boolean;
   size?: 'small' | 'medium';
@@ -43,6 +49,7 @@ interface Emits {
 const props = withDefaults(defineProps<Props>(), {
   type: 'text',
   selected: false,
+  error: false,
   disabled: false,
   fullWidth: true,
   size: 'medium',
@@ -50,7 +57,12 @@ const props = withDefaults(defineProps<Props>(), {
 
 const emit = defineEmits<Emits>();
 
-const pickerClasses = computed(() => ['picker', `picker--${props.size}`, props.fullWidth ? 'picker--full-width' : '', props.selected ? 'picker--selected' : '', props.disabled ? 'picker--disabled' : '', props.className ?? ''].filter(Boolean));
+const pickerClasses = computed(() => ['picker', `picker--${props.size}`, props.fullWidth ? 'picker--full-width' : '', props.selected ? 'picker--selected' : '', props.error ? 'picker--error' : '', props.disabled ? 'picker--disabled' : '', props.className ?? ''].filter(Boolean));
+
+function isImageUrl(val: string | { src: string; alt?: string } | undefined): val is string {
+  if (val == null || typeof val !== 'string') return false;
+  return val.startsWith('/') || val.startsWith('http') || val.startsWith('data:');
+}
 
 const imageSrc = computed(() => {
   if (props.type !== 'image' || props.value == null) return '';
@@ -62,8 +74,24 @@ const imageAlt = computed(() => {
   return typeof props.value === 'object' && props.value.alt != null ? props.value.alt : '';
 });
 
+/** When type is "color", value can be a hex or an image URL; show image when it's a URL */
+const showAsImage = computed(() => {
+  if (props.type === 'color' && props.value != null && isImageUrl(props.value)) return true;
+  return props.type === 'image' && !!imageSrc.value;
+});
+
+const displayImageSrc = computed(() => {
+  if (props.type === 'color' && props.value != null && isImageUrl(props.value)) return props.value;
+  return imageSrc.value;
+});
+
+const displayImageAlt = computed(() => {
+  if (props.type === 'color' && props.value != null && isImageUrl(props.value)) return props.label;
+  return imageAlt.value;
+});
+
 const swatchStyle = computed(() => {
-  if (props.type !== 'color' || props.value == null) return {};
+  if (props.type !== 'color' || props.value == null || isImageUrl(props.value)) return {};
   const hex = typeof props.value === 'string' ? props.value : '#e0e0e0';
   return { backgroundColor: hex };
 });
@@ -127,6 +155,14 @@ function handleClick(event: MouseEvent) {
   border-color: var(--color-brand);
 }
 
+.picker--error {
+  border-color: var(--color-error, #c53030);
+}
+
+.picker--error:focus {
+  outline-color: var(--color-error, #c53030);
+}
+
 .picker--disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -170,7 +206,7 @@ function handleClick(event: MouseEvent) {
   width: var(--picker-image-size);
   height: var(--picker-image-size);
   object-fit: cover;
-  border-radius: var(--picker-radius);
+  border-radius: 50%;
   border: 1px solid var(--picker-border);
   flex-shrink: 0;
 }
@@ -181,6 +217,25 @@ function handleClick(event: MouseEvent) {
   align-items: center;
   justify-content: center;
   color: var(--picker-label-color);
+}
+
+.picker-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  width: 100%;
+}
+
+.picker-wrap .picker--full-width {
+  width: 100%;
+}
+
+.picker__error-message {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  color: var(--color-error, #c53030);
+  line-height: 1.4;
 }
 
 @media (min-width: 768px) {

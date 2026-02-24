@@ -2,11 +2,11 @@
   <BasePanel :model-value="modelValue" title="Side Panel" width="720px" @update:model-value="emit('update:modelValue', $event)">
     <p class="side-panel__intro">Choose a side panel color for your cabinet.</p>
     <ul class="side-panel__list" role="list">
-      <li v-for="item in sideOptions" :key="item.id" class="side-panel__item">
+      <li v-for="item in SIDE_OPTIONS" :key="item.id" class="side-panel__item">
         <ListItem
           :title="item.title"
           :image="item.image"
-          :selected="color === item.image"
+          :selected="selection?.id === item.id"
           @click="selectOption(item)"
         />
       </li>
@@ -15,43 +15,22 @@
 </template>
 
 <script setup lang="ts">
+import { SIDE_OPTIONS, type SideOption } from '../../constants/dummy';
+
 interface Props {
   modelValue: boolean;
-  color?: string;
+  selection?: SideOption | null;
 }
 
-interface SideOption {
-  id: string;
-  title: string;
-  image: string;
-}
-
-const props = withDefaults(defineProps<Props>(), {
-  color: '#c4b8a8',
-});
+const props = defineProps<Props>();
 
 const emit = defineEmits<{
   'update:modelValue': [value: boolean];
-  'update:color': [value: string];
+  'update:selection': [value: SideOption];
 }>();
 
-const sideOptions: SideOption[] = [
-  { id: 'sneeuwwit', title: 'Sneeuwwit', image: '#ffffff' },
-  { id: 'premiumwit', title: 'Premiumwit', image: '#faf8f5' },
-  { id: 'kalkwit', title: 'Kalkwit', image: '#f2f0eb' },
-  { id: 'magic-grijs', title: 'Magic-grijs', image: '#a8a49e' },
-  { id: 'klei', title: 'Klei', image: '#8b8478' },
-  { id: 'magnolia', title: 'Magnolia', image: '#e8e4df' },
-  { id: 'lichtgrijs', title: 'Lichtgrijs', image: '#d8d8d4' },
-  { id: 'antraciet', title: 'Antraciet', image: '#3d3d3d' },
-  { id: 'taupe', title: 'Taupe', image: '#c4b8a8' },
-  { id: 'zand', title: 'Zand', image: '#e6e0d5' },
-  { id: 'grafiet', title: 'Grafiet', image: '#4a4a4a' },
-  { id: 'natuurwit', title: 'Natuurwit', image: '#f5f3ef' },
-];
-
 function selectOption(item: SideOption) {
-  emit('update:color', item.image);
+  emit('update:selection', item);
   emit('update:modelValue', false);
 }
 </script>

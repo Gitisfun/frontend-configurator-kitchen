@@ -35,54 +35,32 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
+import { useToast } from '../../composables/useToast';
+import {
+  CONFIGURATOR_TYPE_OPTIONS,
+  SUBCATEGORIES_BY_TYPE,
+  type Subcategory,
+} from '../../constants/dummy';
 
 const route = useRoute();
+const router = useRouter();
+const toast = useToast();
 const selectedId = ref<string | null>(null);
 
 const categoryTitle = computed(() => {
   const type = route.query.type as string | undefined;
-  if (type === 'base') return 'onderkasten';
-  if (type === 'wall') return 'bovenkasten';
-  return 'hoge kasten';
+  const option = CONFIGURATOR_TYPE_OPTIONS.find((o) => o.value === type);
+  return option?.label ?? 'hoge kasten';
 });
-
-interface Subcategory {
-  id: string;
-  title: string;
-  image: string;
-}
 
 const subcategories = computed<Subcategory[]>(() => {
   const type = route.query.type as string | undefined;
-  if (type === 'base') {
-    return [
-      { id: 'base-60', title: 'Onderkast(en) 60cm breed', image: '/placeholder.png' },
-      { id: 'base-80', title: 'Onderkast(en) 80cm breed', image: '/placeholder.png' },
-      { id: 'base-100', title: 'Onderkast(en) 100cm breed', image: '/placeholder.png' },
-      { id: 'base-accessories', title: 'Onderkast accessoires', image: '/placeholder.png' },
-    ];
-  }
-  if (type === 'wall') {
-    return [
-      { id: 'wall-60', title: 'Bovenkast(en) 60cm breed', image: '/placeholder.png' },
-      { id: 'wall-80', title: 'Bovenkast(en) 80cm breed', image: '/placeholder.png' },
-      { id: 'wall-accessories', title: 'Bovenkast accessoires', image: '/placeholder.png' },
-    ];
-  }
-  return [
-    { id: 'tall-143', title: 'Hoge kast(en) 143cm hoog', image: '/placeholder.png' },
-    { id: 'tall-194', title: 'Hoge kast(en) 194.8cm hoog', image: '/placeholder.png' },
-    { id: 'tall-207', title: 'Hoge kast(en) 207.8cm hoog', image: '/placeholder.png' },
-    { id: 'tall-220', title: 'Hoge kast(en) 220.8cm hoog', image: '/placeholder.png' },
-    { id: 'tall-accessories', title: 'Hoge kast accessoires', image: '/placeholder.png' },
-    { id: 'tall-panels', title: 'Hoge kast afwerkpanelen', image: '/placeholder.png' },
-  ];
+  return type ? SUBCATEGORIES_BY_TYPE[type] ?? [] : [];
 });
 
 function selectSubcategory(item: Subcategory) {
   selectedId.value = selectedId.value === item.id ? null : item.id;
-  // TODO: navigate or persist selection
 }
 
 function onBack() {
@@ -90,7 +68,16 @@ function onBack() {
 }
 
 function onNext() {
-  // TODO: go to next step
+  const type = route.query.type as string | undefined;
+  const subcategoryId = selectedId.value;
+  if (!subcategoryId) {
+    toast.warning('Selecteer een kast om verder te gaan.');
+    return;
+  }
+  router.push({
+    path: '/configurator/product',
+    query: { type: type ?? '', subcategory: subcategoryId },
+  });
 }
 </script>
 

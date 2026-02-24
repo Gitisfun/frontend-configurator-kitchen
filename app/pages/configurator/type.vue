@@ -14,16 +14,15 @@
             selecteer hier de kast groep waar je mee wil beginnen
           </BaseParagraph>
 
-          <div class="configurator-type-page__buttons">
-            <BaseButton variant="outlined" size="medium" rounded full-width @click="selectType('base')">
-              onderkasten
-            </BaseButton>
-            <BaseButton variant="outlined" size="medium" rounded full-width @click="selectType('wall')">
-              bovenkasten
-            </BaseButton>
-            <BaseButton variant="outlined" size="medium" rounded full-width @click="selectType('tall')">
-              hoge kasten
-            </BaseButton>
+          <div class="configurator-type-page__radios" role="radiogroup" aria-label="Kast groep">
+            <BaseRadioButton
+              v-for="option in CONFIGURATOR_TYPE_OPTIONS"
+              :key="option.id"
+              v-model="selectedTypeValue"
+              :name="radioGroupName"
+              :value="option.value"
+              :label="option.label"
+            />
           </div>
 
           <div class="configurator-type-page__design">
@@ -59,21 +58,31 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import { useToast } from '../../composables/useToast';
+import { CONFIGURATOR_TYPE_OPTIONS } from '../../constants/dummy';
 
+const route = useRoute();
 const router = useRouter();
+const toast = useToast();
 
-function selectType(type: string) {
-  router.push({ path: '/configurator/subcategories', query: { type } });
-}
+const radioGroupName = 'configurator-type';
+
+const selectedTypeValue = ref((route.query.type as string) ?? '');
 
 function onBack() {
   window.history.back();
 }
 
 function onNext() {
-  // TODO: go to next step
-  console.log('Next clicked');
+  const value = selectedTypeValue.value;
+  const option = CONFIGURATOR_TYPE_OPTIONS.find((o) => o.value === value);
+  if (!option) {
+    toast.warning('Selecteer een kast groep om verder te gaan.');
+    return;
+  }
+  router.push({ path: '/configurator/subcategories', query: { type: option.value } });
 }
 </script>
 
@@ -128,11 +137,27 @@ function onNext() {
   margin-top: 0;
 }
 
-.configurator-type-page__buttons {
+.configurator-type-page__radios {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
   margin-top: 0.5rem;
+}
+
+.configurator-type-page__radios :deep(.radio) {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--picker-border);
+  border-radius: var(--picker-radius);
+  font-size: var(--paragraph-size-medium);
+}
+
+.configurator-type-page__radios :deep(.radio:has(.radio__input:checked)) {
+  border-color: var(--color-brand);
+  background-color: var(--color-surface-hover);
 }
 
 .configurator-type-page__design {
