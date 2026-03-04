@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Cabinet door hint -->
+  <rect x="60" y="40" width="280" height="220" rx="3" fill="#e8e3da" stroke="#d1cbc2" stroke-width="1"/>
+  <!-- Knob shadow -->
+  <ellipse cx="202" cy="160" rx="16" ry="4" fill="#d1cbc2" opacity="0.5"/>
+  <!-- Square knob base -->
+  <rect x="182" y="128" width="36" height="28" rx="5" fill="#b5ad9e" stroke="#8a8278" stroke-width="1.3"/>
+  <!-- Beveled inner face -->
+  <rect x="186" y="132" width="28" height="20" rx="3" fill="#c2b8aa" stroke="#a09688" stroke-width="0.8"/>
+  <!-- Highlight -->
+  <rect x="189" y="134" width="14" height="8" rx="2" fill="#d5cfc5" opacity="0.5"/>
+  <!-- Center screw -->
+  <circle cx="200" cy="142" r="2" fill="#8a8278"/>
+</svg>

@@ -1,40 +1,14 @@
 <template>
-  <button
-    type="button"
-    class="list-item"
-    :class="{ 'list-item--selected': selected }"
-    :aria-pressed="selected"
-    :aria-label="ariaLabel"
-    @click="emit('click')"
-  >
-    <div class="list-item__media" :style="mediaStyle">
-      <img
-        v-if="isImageUrl"
-        :src="image"
-        :alt="title"
-        class="list-item__image"
-        loading="lazy"
-      />
+  <button type="button" class="list-item" :class="{ 'list-item--selected': selected }" :aria-pressed="selected" :aria-label="ariaLabel" @click="emit('click')">
+    <div class="list-item__media" :class="{ 'list-item__media--svg': isSvg }" :style="mediaStyle">
+      <img v-if="isImageUrl" :src="image" :alt="title" class="list-item__image" :class="{ 'list-item__image--svg': isSvg }" loading="lazy" />
     </div>
     <h3 class="list-item__title">{{ title }}</h3>
     <p v-if="description" class="list-item__description">{{ description }}</p>
     <div v-if="priceClass != null" class="list-item__price-class" aria-label="Prijsklasse {{ priceClass }} van 5">
-      <span
-        v-for="n in 5"
-        :key="n"
-        class="list-item__dot"
-        :class="{ 'list-item__dot--filled': n <= priceClass }"
-        aria-hidden="true"
-      />
+      <span v-for="n in 5" :key="n" class="list-item__dot" :class="{ 'list-item__dot--filled': n <= priceClass }" aria-hidden="true" />
     </div>
-    <a
-      v-if="infoUrl"
-      :href="infoUrl"
-      class="list-item__info"
-      target="_blank"
-      rel="noopener noreferrer"
-      @click.stop
-    >
+    <a v-if="infoUrl" :href="infoUrl" class="list-item__info" target="_blank" rel="noopener noreferrer" @click.stop>
       <span class="list-item__info-icon" aria-hidden="true">i</span>
       informatie
     </a>
@@ -70,6 +44,8 @@ const isImageUrl = computed(() => {
   if (!props.image) return false;
   return props.image.startsWith('http') || props.image.startsWith('/') || props.image.startsWith('data:');
 });
+
+const isSvg = computed(() => props.image?.endsWith('.svg') ?? false);
 
 const mediaStyle = computed(() => {
   if (isImageUrl.value) return {};
@@ -119,7 +95,9 @@ const ariaLabel = computed(() => {
 
 .list-item--selected:hover {
   border-color: var(--color-brand-hover);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 0 0 1px var(--color-brand-hover);
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    0 0 0 1px var(--color-brand-hover);
 }
 
 .list-item__media {
@@ -136,6 +114,16 @@ const ariaLabel = computed(() => {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.list-item__media--svg {
+  background-color: #f5f1ec;
+  border-color: #e8e3da;
+}
+
+.list-item__image--svg {
+  object-fit: contain;
+  padding: 0.25rem;
 }
 
 .list-item__title {

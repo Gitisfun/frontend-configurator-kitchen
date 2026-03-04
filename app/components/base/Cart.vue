@@ -54,14 +54,6 @@
               </template>
               Winkelwagen bekijken
             </BaseButton>
-            <BaseButton variant="outlined" size="small" rounded full-width class="cart-dropdown__btn" @click.prevent="onSaveCart">
-              <template #iconLeft>
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
-                </svg>
-              </template>
-              Winkelwagen opslaan
-            </BaseButton>
             <NuxtLink to="/configurator" class="cart-dropdown__link" @click="dropdownOpen = false"> verder winkelen </NuxtLink>
           </div>
         </div>
@@ -71,8 +63,9 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCartStore } from '../../../stores/cart';
 
 interface Props {
   itemCount?: number;
@@ -90,7 +83,18 @@ const props = withDefaults(defineProps<Props>(), {
 });
 
 const router = useRouter();
+const cartStore = useCartStore();
 const dropdownOpen = ref(false);
+
+watch(
+  () => cartStore.shouldOpenDropdown,
+  (shouldOpen) => {
+    if (shouldOpen && props.itemCount > 0) {
+      dropdownOpen.value = true;
+      cartStore.clearDropdownOpen();
+    }
+  }
+);
 
 const cartLines = computed(() => {
   if (props.items.length > 0) return props.items;
@@ -109,10 +113,6 @@ function goToCart() {
   router.push(props.to);
 }
 
-function onSaveCart() {
-  dropdownOpen.value = false;
-  console.log('Save cart');
-}
 </script>
 
 <style scoped>
@@ -156,7 +156,7 @@ function onSaveCart() {
   border: 1px solid var(--picker-border);
   background-color: var(--color-surface);
   color: var(--color-text-primary);
-  box-shadow: 0 1px 3px rgba(27, 58, 92, 0.06);
+  box-shadow: 0 1px 3px color-mix(in srgb, var(--color-text-primary) 6%, transparent);
   gap: 0;
 }
 
@@ -164,7 +164,7 @@ function onSaveCart() {
   background-color: var(--color-surface-hover);
   border-color: var(--color-text-muted-light);
   color: var(--color-text-primary);
-  box-shadow: 0 2px 8px rgba(27, 58, 92, 0.08);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--color-text-primary) 8%, transparent);
 }
 
 .cart__text {

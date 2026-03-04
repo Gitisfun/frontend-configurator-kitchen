@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Cabinet door hint -->
+  <rect x="60" y="40" width="280" height="220" rx="3" fill="#e8e3da" stroke="#d1cbc2" stroke-width="1"/>
+  <!-- Knob shadow -->
+  <ellipse cx="202" cy="158" rx="14" ry="4" fill="#d1cbc2" opacity="0.5"/>
+  <!-- Conical knob - wider base narrowing to top -->
+  <path d="M186 154 L192 128 L208 128 L214 154 Z" fill="#b5ad9e" stroke="#8a8278" stroke-width="1.2" stroke-linejoin="round"/>
+  <!-- Top face -->
+  <rect x="192" y="126" width="16" height="4" rx="2" fill="#c2b8aa" stroke="#8a8278" stroke-width="0.8"/>
+  <!-- Ridge detail -->
+  <line x1="192" y1="132" x2="188" y2="150" stroke="#a09688" stroke-width="0.5"/>
+  <line x1="197" y1="130" x2="195" y2="152" stroke="#a09688" stroke-width="0.5"/>
+  <line x1="203" y1="130" x2="205" y2="152" stroke="#a09688" stroke-width="0.5"/>
+  <line x1="208" y1="132" x2="212" y2="150" stroke="#a09688" stroke-width="0.5"/>
+  <!-- Highlight -->
+  <path d="M194 130 L196 130 L193 148 L191 148 Z" fill="#ccc6bc" opacity="0.4"/>
+</svg>

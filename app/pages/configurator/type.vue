@@ -1,52 +1,32 @@
 <template>
   <div class="configurator-page configurator-type-page">
-    <NuxtLink to="/configurator" class="configurator-type-page__back-link">
-      terug naar het ontwerp
-    </NuxtLink>
+    <NuxtLink to="/configurator" class="configurator-type-page__back-link"> terug naar het ontwerp </NuxtLink>
 
     <section class="configurator-main">
       <div class="configurator-main__inner">
         <div class="configurator-type-page__content">
-          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-type-page__title">
-            selecteer kasten
-          </BaseHeader>
-          <BaseParagraph size="medium" align="left" color="primary" class="configurator-type-page__description">
-            selecteer hier de kast groep waar je mee wil beginnen
-          </BaseParagraph>
+          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-type-page__title"> selecteer kasten </BaseHeader>
+          <BaseParagraph size="medium" align="left" color="primary" class="configurator-type-page__description"> selecteer hier de kast groep waar je mee wil beginnen </BaseParagraph>
 
           <div class="configurator-type-page__radios" role="radiogroup" aria-label="Kast groep">
-            <BaseRadioButton
-              v-for="option in CONFIGURATOR_TYPE_OPTIONS"
-              :key="option.id"
-              v-model="selectedTypeValue"
-              :name="radioGroupName"
-              :value="option.value"
-              :label="option.label"
-            />
+            <BaseRadioButton v-for="option in CONFIGURATOR_TYPE_OPTIONS" :key="option.id" v-model="selectedTypeValue" :name="radioGroupName" :value="option.value" :label="option.label" @hover="onRadioHover" @hover-end="onRadioHoverEnd" />
           </div>
 
           <div class="configurator-type-page__design">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-type-page__design-title">
-              Jouw ontwerp
-            </BaseHeader>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
-              Front: sneeuwwit mat kunststof Greep/knop: greep 174
-            </BaseParagraph>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
-              Kastkleur: sneeuwwit Plintkleur: sneeuwwit mat kunststof
-            </BaseParagraph>
+            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-type-page__design-title"> Jouw ontwerp </BaseHeader>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Front: sneeuwwit mat kunststof Greep/knop: greep 174 </BaseParagraph>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Kastkleur: sneeuwwit Plintkleur: sneeuwwit mat kunststof </BaseParagraph>
             <NuxtLink to="/configurator" class="configurator-type-page__change-link">wijzigen</NuxtLink>
           </div>
         </div>
 
         <div class="configurator-type-page__media">
-          <img
-            src="/placeholder.png"
-            alt="Cabinet preview"
-            class="configurator-type-page__image"
-            width="600"
-            height="400"
-          />
+          <div class="configurator-type-page__canvas-wrap">
+            <div ref="canvasContainerRef" class="configurator-type-page__canvas-host" :class="{ 'configurator-type-page__canvas-host--ready': modelLoaded }" aria-hidden="true" />
+            <div v-if="!modelLoaded" class="configurator-type-page__canvas-loading" role="status" aria-live="polite">
+              <span class="configurator-type-page__spinner" />
+            </div>
+          </div>
         </div>
       </div>
 
@@ -58,18 +38,45 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useConfiguratorState } from '../../composables/useConfiguratorState';
+import { useModelViewer } from '../../composables/useModelViewer';
 import { useToast } from '../../composables/useToast';
 import { CONFIGURATOR_TYPE_OPTIONS } from '../../constants/dummy';
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
+const canvasContainerRef = ref<HTMLElement | null>(null);
 
+const { plinthSelection, frontSelection, sideSelection } = useConfiguratorState();
 const radioGroupName = 'configurator-type';
-
 const selectedTypeValue = ref((route.query.type as string) ?? '');
+const previewType = ref<string | null>(null);
+const displayType = computed(() => previewType.value ?? selectedTypeValue.value);
+
+function onRadioHover(value: string) {
+  previewType.value = value;
+}
+
+function onRadioHoverEnd() {
+  previewType.value = null;
+}
+
+const { modelLoaded } = useModelViewer(canvasContainerRef, {
+  modelPath: '/threecabinets.glb',
+  selections: { plinthSelection, frontSelection, sideSelection },
+  selectedType: displayType,
+});
+
+watch(
+  () => route.query.type,
+  (type) => {
+    selectedTypeValue.value = (type as string) ?? '';
+  },
+  { immediate: true },
+);
 
 function onBack() {
   window.history.back();
@@ -82,6 +89,7 @@ function onNext() {
     toast.warning('Selecteer een kast groep om verder te gaan.');
     return;
   }
+  router.replace({ path: '/configurator/type', query: { type: option.value } });
   router.push({ path: '/configurator/subcategories', query: { type: option.value } });
 }
 </script>
@@ -194,13 +202,57 @@ function onNext() {
   justify-content: center;
 }
 
-.configurator-type-page__image {
+.configurator-type-page__canvas-wrap {
+  position: relative;
   width: 100%;
-  max-width: 480px;
-  height: auto;
-  display: block;
+  max-width: 560px;
+  min-height: 360px;
+  aspect-ratio: 1 / 1;
   border-radius: var(--picker-radius);
+  overflow: hidden;
   background-color: #f5f2ee;
+}
+
+.configurator-type-page__canvas-host {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.configurator-type-page__canvas-host--ready {
+  visibility: visible;
+  opacity: 1;
+}
+
+.configurator-type-page__canvas-host :deep(canvas) {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: contain;
+}
+
+.configurator-type-page__canvas-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: #ffffff;
+}
+
+.configurator-type-page__spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 3px solid rgba(26, 54, 93, 0.2);
+  border-top-color: var(--color-brand);
+  animation: configurator-spin 0.8s linear infinite;
+}
+
+@keyframes configurator-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .configurator-main__actions {
@@ -231,7 +283,8 @@ function onNext() {
     right: var(--intro-padding-x-desktop);
   }
 
-  .configurator-type-page__image {
+  .configurator-type-page__canvas-wrap {
+    min-height: 460px;
     max-width: 100%;
   }
 

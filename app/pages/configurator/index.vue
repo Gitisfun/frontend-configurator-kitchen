@@ -8,7 +8,17 @@
     <section class="configurator-main">
       <div class="configurator-main__inner">
         <div class="configurator-main__media">
-          <div v-if="canvasMounted" ref="canvasContainerRef" class="configurator-main__canvas-wrap" aria-hidden="true" />
+          <div class="configurator-main__canvas-wrap">
+            <div
+              ref="canvasContainerRef"
+              class="configurator-main__canvas-host"
+              :class="{ 'configurator-main__canvas-host--ready': modelLoaded }"
+              aria-hidden="true"
+            />
+            <div v-if="!modelLoaded" class="configurator-main__canvas-loading" role="status" aria-live="polite">
+              <span class="configurator-main__spinner" />
+            </div>
+          </div>
         </div>
         <div class="configurator-main__pickers">
           <BasePicker :label="PICKER_LABEL_FRONT" type="color" :value="frontSelection?.image ?? null" :error="showPickerErrors && !frontSelection" error-message="Please select a front color" @click="onPickerClick(PICKER_KEY_FRONT)" />
@@ -44,7 +54,7 @@ const toast = useToast();
 
 const { plinthPanelOpen, plinthSelection, frontPanelOpen, frontSelection, sidePanelOpen, sideSelection, handlePanelOpen, handleSelection, onPickerClick } = useConfiguratorState();
 
-const { canvasMounted } = useCabinetViewer(canvasContainerRef, {
+const { modelLoaded } = useCabinetViewer(canvasContainerRef, {
   plinthSelection,
   frontSelection,
   sideSelection,
@@ -120,19 +130,55 @@ function onNext() {
 }
 
 .configurator-main__canvas-wrap {
+  position: relative;
   width: 100%;
   max-width: 480px;
   aspect-ratio: 4 / 3;
   border-radius: var(--picker-radius);
   overflow: hidden;
-  background-color: #f5f2ee;
+  background-color: var(--color-surface);
 }
 
-.configurator-main__canvas-wrap :deep(canvas) {
+.configurator-main__canvas-host {
+  width: 100%;
+  height: 100%;
+  visibility: hidden;
+  opacity: 0;
+}
+
+.configurator-main__canvas-host--ready {
+  visibility: visible;
+  opacity: 1;
+}
+
+.configurator-main__canvas-host :deep(canvas) {
   display: block;
   width: 100% !important;
   height: 100% !important;
   object-fit: contain;
+}
+
+.configurator-main__canvas-loading {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: var(--color-surface);
+}
+
+.configurator-main__spinner {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+  border: 3px solid rgba(26, 54, 93, 0.2);
+  border-top-color: var(--color-brand);
+  animation: configurator-spin 0.8s linear infinite;
+}
+
+@keyframes configurator-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .configurator-main__hint {

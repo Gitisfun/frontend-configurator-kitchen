@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Cabinet door hint -->
+  <rect x="60" y="40" width="280" height="220" rx="3" fill="#e8e3da" stroke="#d1cbc2" stroke-width="1"/>
+  <!-- Handle shadow -->
+  <rect x="142" y="154" width="120" height="5" rx="2.5" fill="#d1cbc2" opacity="0.4"/>
+  <!-- Left mounting post -->
+  <rect x="148" y="134" width="8" height="16" rx="2" fill="#b0b5ba" stroke="#8a9098" stroke-width="1"/>
+  <!-- Right mounting post -->
+  <rect x="244" y="134" width="8" height="16" rx="2" fill="#b0b5ba" stroke="#8a9098" stroke-width="1"/>
+  <!-- T-bar horizontal -->
+  <rect x="146" y="126" width="108" height="10" rx="5" fill="#c0c5ca" stroke="#8a9098" stroke-width="1.3"/>
+  <!-- Chrome highlight -->
+  <rect x="160" y="128" width="70" height="3" rx="1.5" fill="#dce0e3" opacity="0.7"/>
+  <!-- Subtle reflection line -->
+  <rect x="150" y="133" width="100" height="1" rx="0.5" fill="#a0a6ab" opacity="0.3"/>
+</svg>

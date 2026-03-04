@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Cabinet door hint -->
+  <rect x="60" y="40" width="280" height="220" rx="3" fill="#e8e3da" stroke="#d1cbc2" stroke-width="1"/>
+  <!-- Knob shadow -->
+  <ellipse cx="202" cy="158" rx="20" ry="5" fill="#d1cbc2" opacity="0.5"/>
+  <!-- Mushroom knob stem -->
+  <rect x="194" y="140" width="12" height="14" rx="2" fill="#a09688" stroke="#8a8278" stroke-width="1"/>
+  <!-- Mushroom knob cap -->
+  <ellipse cx="200" cy="138" rx="20" ry="10" fill="#b5ad9e" stroke="#8a8278" stroke-width="1.2"/>
+  <!-- Top highlight -->
+  <ellipse cx="196" cy="134" rx="10" ry="5" fill="#ccc6bc" opacity="0.5"/>
+</svg>

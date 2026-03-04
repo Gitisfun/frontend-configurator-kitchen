@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Cabinet door hint -->
+  <rect x="60" y="40" width="280" height="220" rx="3" fill="#e8e3da" stroke="#d1cbc2" stroke-width="1"/>
+  <!-- Knob shadow -->
+  <ellipse cx="202" cy="156" rx="18" ry="5" fill="#d1cbc2" opacity="0.5"/>
+  <!-- Cylindrical knob base -->
+  <rect x="185" y="132" width="30" height="20" rx="4" fill="#c2b8aa" stroke="#a09688" stroke-width="1.2"/>
+  <!-- Knob top cap -->
+  <rect x="187" y="128" width="26" height="8" rx="3" fill="#b5ad9e" stroke="#8a8278" stroke-width="1"/>
+  <!-- Highlight -->
+  <rect x="190" y="130" width="10" height="4" rx="2" fill="#d5cfc5" opacity="0.6"/>
+  <!-- Ridge lines -->
+  <line x1="190" y1="138" x2="190" y2="148" stroke="#a09688" stroke-width="0.6"/>
+  <line x1="195" y1="138" x2="195" y2="148" stroke="#a09688" stroke-width="0.6"/>
+  <line x1="200" y1="138" x2="200" y2="148" stroke="#a09688" stroke-width="0.6"/>
+  <line x1="205" y1="138" x2="205" y2="148" stroke="#a09688" stroke-width="0.6"/>
+  <line x1="210" y1="138" x2="210" y2="148" stroke="#a09688" stroke-width="0.6"/>
+</svg>

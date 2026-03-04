@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Hinge top-left -->
+  <rect x="60" y="55" width="120" height="80" rx="6" fill="#e8e3da" stroke="#b5ad9e" stroke-width="1.5"/>
+  <rect x="78" y="70" width="24" height="50" rx="3" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <circle cx="90" cy="80" r="4" fill="#a09688"/>
+  <circle cx="90" cy="110" r="4" fill="#a09688"/>
+  <rect x="102" y="82" width="60" height="8" rx="2" fill="#d5cfc5" stroke="#a09688" stroke-width="1"/>
+  <rect x="102" y="96" width="60" height="8" rx="2" fill="#d5cfc5" stroke="#a09688" stroke-width="1"/>
+  <text x="120" y="128" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#8a8278">Scharnier</text>
+
+  <!-- Handle top-right -->
+  <rect x="220" y="55" width="120" height="80" rx="6" fill="#e8e3da" stroke="#b5ad9e" stroke-width="1.5"/>
+  <rect x="262" y="68" width="7" height="54" rx="3.5" fill="#8a8278"/>
+  <rect x="278" y="68" width="40" height="6" rx="3" fill="#a09688"/>
+  <rect x="278" y="82" width="40" height="6" rx="3" fill="#a09688"/>
+  <rect x="278" y="96" width="40" height="6" rx="3" fill="#a09688"/>
+  <text x="280" y="128" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#8a8278">Grepen</text>
+
+  <!-- Shelf pins bottom-left -->
+  <rect x="60" y="160" width="120" height="80" rx="6" fill="#e8e3da" stroke="#b5ad9e" stroke-width="1.5"/>
+  <circle cx="90" cy="185" r="5" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <circle cx="110" cy="185" r="5" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <circle cx="130" cy="185" r="5" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <circle cx="150" cy="185" r="5" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <rect x="80" y="200" width="80" height="6" rx="1" fill="#d5cfc5" stroke="#a09688" stroke-width="0.8"/>
+  <text x="120" y="234" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#8a8278">Legplanken</text>
+
+  <!-- Soft-close bottom-right -->
+  <rect x="220" y="160" width="120" height="80" rx="6" fill="#e8e3da" stroke="#b5ad9e" stroke-width="1.5"/>
+  <rect x="248" y="178" width="64" height="12" rx="3" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <rect x="250" y="196" width="60" height="8" rx="2" fill="#d5cfc5" stroke="#a09688" stroke-width="0.8"/>
+  <circle cx="256" cy="200" r="2.5" fill="#a09688"/>
+  <text x="280" y="234" text-anchor="middle" font-family="system-ui, sans-serif" font-size="9" fill="#8a8278">Dempers</text>
+</svg>

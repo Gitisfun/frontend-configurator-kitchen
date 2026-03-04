@@ -3,37 +3,35 @@
     <section class="configurator-main">
       <div class="configurator-main__inner">
         <header class="configurator-product-page__header">
-          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-product-page__title"> Apparatenkast, met inbouwnis 178cm hoog</BaseHeader>
+          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-product-page__title">
+            {{ product?.title ?? 'Product' }}
+          </BaseHeader>
         </header>
 
         <div class="configurator-product-page__media">
-          <img src="/placeholder.png" alt="Product" class="configurator-product-page__image" width="600" height="400" />
-          <img src="/placeholder.png" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
+          <img :src="product?.image ?? '/placeholder.png'" alt="Product" class="configurator-product-page__image" width="600" height="400" />
+          <img :src="product?.thumb ?? product?.image ?? '/placeholder.png'" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
         </div>
 
         <div class="configurator-product-page__column configurator-product-page__column--formaat">
           <div class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Selecteer formaat </BaseHeader>
             <div class="configurator-product-page__selects">
-              <BaseSelect v-model="form.width" :options="widthOptions" label="Breedte" />
-              <BaseSelect v-model="form.height" :options="heightOptions" label="Hoogte" />
-              <BaseSelect v-model="form.depth" :options="depthOptions" label="Diepte" />
-              <BaseSelect v-model="form.plinth" :options="plinthOptions" label="Plint" />
+              <BaseSelect v-model="form.width" :options="product?.dimensions.width ?? []" label="Breedte" />
+              <BaseSelect v-model="form.height" :options="product?.dimensions.height ?? []" label="Hoogte" />
+              <BaseSelect v-model="form.depth" :options="product?.dimensions.depth ?? []" label="Diepte" />
+              <BaseSelect v-if="(product?.dimensions.plinth?.length ?? 0) > 0" v-model="form.plinth" :options="product?.dimensions.plinth ?? []" label="Plint" />
             </div>
-            <fieldset class="configurator-product-page__radios" aria-label="Deurrichting">
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" label="Deur links" />
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" label="Deur rechts" />
+            <fieldset v-if="product?.doorSwing.leftLabel || product?.doorSwing.rightLabel" class="configurator-product-page__radios" aria-label="Deurrichting">
+              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" :label="product?.doorSwing.leftLabel ?? 'Deur links'" />
+              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" :label="product?.doorSwing.rightLabel ?? 'Deur rechts'" />
             </fieldset>
           </div>
-          <div class="configurator-product-page__section">
+          <div v-if="product?.addOns?.length" class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Maak je aankoop compleet </BaseHeader>
             <div class="configurator-product-page__checkboxes">
-              <BaseCheckbox v-model="form.addOns" value="front">
-                Frontverlenging voor onderkastdeur + 53,-
-                <span class="configurator-product-page__info-icon" aria-hidden="true">i</span>
-              </BaseCheckbox>
-              <BaseCheckbox v-model="form.addOns" value="top">
-                Opzetkast + 158,-
+              <BaseCheckbox v-for="addon in product.addOns" :key="addon.id" v-model="form.addOns" :value="addon.id">
+                {{ addon.name }} + {{ addon.price }},-
                 <span class="configurator-product-page__info-icon" aria-hidden="true">i</span>
               </BaseCheckbox>
             </div>
@@ -41,7 +39,7 @@
           <div class="configurator-product-page__quantity-price">
             <BaseNumberfield v-model="quantity" label="Selecteer aantal" :min="1" :max="99" aria-label="Aantal" />
             <div class="configurator-product-page__price">
-              <span class="configurator-product-page__price-amount">{{ price }},-</span>
+              <span class="configurator-product-page__price-amount">{{ totalPrice }},-</span>
               <BaseParagraph size="small" align="left" color="primary" class="configurator-product-page__price-unit"> per stuk </BaseParagraph>
             </div>
           </div>
@@ -51,20 +49,8 @@
           <div class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Productinformatie </BaseHeader>
             <ul class="configurator-product-page__bullets">
-              <li>
-                <BaseParagraph size="small" align="left" color="primary"> hoogte 208cm excl. plinthoogte, met 2 deuren (onderste deur 77,6cm hoog) en een nis voor een geïntegreerde koel/vries combinatie 178,5cm </BaseParagraph>
-              </li>
-              <li>
-                <BaseParagraph size="small" align="left" color="primary"> draairichting deur volgens afbeelding </BaseParagraph>
-              </li>
-              <li>
-                <BaseParagraph size="small" align="left" color="primary"> kast wordt volledig voorgemonteerd geleverd </BaseParagraph>
-              </li>
-              <li>
-                <BaseParagraph size="small" align="left" color="primary"> Blum Clip Top scharnieren zijn standaard voorzien van ingebouwde demping met softclose </BaseParagraph>
-              </li>
-              <li>
-                <BaseParagraph size="small" align="left" color="primary"> stelpoten, grepen en plintmateriaal zijn inbegrepen </BaseParagraph>
+              <li v-for="(info, i) in product?.productInformation" :key="i">
+                <BaseParagraph size="small" align="left" color="primary">{{ info }}</BaseParagraph>
               </li>
             </ul>
           </div>
@@ -86,52 +72,63 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
+import { useCartStore } from '../../../stores/cart';
+import { CONFIGURATOR_PRODUCTS, type ConfiguratorProduct } from '../../constants/dummy';
 
 const router = useRouter();
+const cartStore = useCartStore();
+
+const product = ref<ConfiguratorProduct | null>(null);
 
 const form = ref({
-  width: '60',
-  height: '207.8',
-  depth: '58',
-  plinth: '12.5',
+  width: '',
+  height: '',
+  depth: '',
+  plinth: '',
   doorSide: 'left' as 'left' | 'right',
   equipment: '',
   addOns: [] as string[],
 });
 
-const widthOptions = [
-  { value: '60', label: '60 cm breed' },
-  { value: '80', label: '80 cm breed' },
-  { value: '100', label: '100 cm breed' },
-];
-
-const heightOptions = [
-  { value: '207.8', label: '207.8 cm hoog' },
-  { value: '194.8', label: '194.8 cm hoog' },
-  { value: '220.8', label: '220.8 cm hoog' },
-];
-
-const depthOptions = [
-  { value: '58', label: '58 cm diep' },
-  { value: '60', label: '60 cm diep' },
-];
-
-const plinthOptions = [
-  { value: '12.5', label: '12.5 cm hoge plint' },
-  { value: '15', label: '15 cm hoge plint' },
-];
-
 const quantity = ref(1);
 
-const basePrice = 528;
-const addOnPrices: Record<string, number> = { front: 53, top: 158 };
+function pickRandomProduct() {
+  if (CONFIGURATOR_PRODUCTS.length === 0) return;
+  const index = Math.floor(Math.random() * CONFIGURATOR_PRODUCTS.length);
+  const p = CONFIGURATOR_PRODUCTS[index];
+  if (p) product.value = p;
+}
 
-const price = computed(() => {
-  let total = basePrice;
+function initFormFromProduct() {
+  const p = product.value;
+  if (!p) return;
+  form.value = {
+    width: p.dimensions.width[0]?.value ?? '',
+    height: p.dimensions.height[0]?.value ?? '',
+    depth: p.dimensions.depth[0]?.value ?? '',
+    plinth: p.dimensions.plinth[0]?.value ?? '',
+    doorSide: p.doorSwing.default,
+    equipment: form.value.equipment,
+    addOns: [],
+  };
+}
+
+onMounted(() => {
+  pickRandomProduct();
+  initFormFromProduct();
+});
+
+watch(product, () => initFormFromProduct(), { immediate: false });
+
+const totalPrice = computed(() => {
+  const p = product.value;
+  if (!p) return 0;
+  let total = p.basePrice;
   for (const id of form.value.addOns) {
-    total += addOnPrices[id] ?? 0;
+    const addon = p.addOns.find((a) => a.id === id);
+    if (addon) total += addon.price;
   }
   return total * quantity.value;
 });
@@ -141,7 +138,27 @@ function onBack() {
 }
 
 function addToCart() {
-  console.log('Add to cart', { form: form.value, quantity: quantity.value, price: price.value });
+  const p = product.value;
+  if (!p) return;
+  const unitPrice = totalPrice.value / quantity.value;
+  cartStore.addItem({
+    productId: p.id,
+    title: p.title,
+    image: p.thumb ?? p.image ?? '/placeholder.png',
+    form: {
+      width: form.value.width,
+      height: form.value.height,
+      depth: form.value.depth,
+      plinth: form.value.plinth,
+      doorSide: form.value.doorSide,
+      equipment: form.value.equipment,
+      addOns: [...form.value.addOns],
+    },
+    quantity: quantity.value,
+    unitPrice,
+    lineTotal: totalPrice.value,
+  });
+  cartStore.requestDropdownOpen();
 }
 </script>
 

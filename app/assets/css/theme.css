@@ -30,8 +30,8 @@
   --color-warning-muted: #faf3e6;
 
   /* ---------- Typography ---------- */
-  --font-sans: 'DM Sans', sans-serif;
-  --font-serif: 'Playfair Display', serif;
+  --font-sans: 'Source Sans 3', sans-serif;
+  --font-serif: 'Libre Baskerville', serif;
 
   --letter-spacing-tight: 0.01em;
   --letter-spacing-body: 0.02em;
@@ -193,7 +193,10 @@
   --navbar-height-desktop: calc(2 * var(--navbar-padding-y-desktop) + var(--navbar-logo-height));
 
   --navbar-link-color: var(--color-text-primary);
+  --navbar-link-color-transparent: #ffffff;
   --navbar-link-color-active: var(--color-brand);
+  --navbar-logo-filter: brightness(0) invert(1);
+  --navbar-logo-filter-scrolled: none;
   --navbar-link-font-size: 15px;
   --navbar-link-font-size-desktop: 16px;
   --navbar-link-underline-height: 2px;

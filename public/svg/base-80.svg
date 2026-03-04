@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" fill="none">
+  <rect width="400" height="300" fill="#f5f1ec"/>
+  <!-- Counter top -->
+  <rect x="75" y="60" width="250" height="14" rx="2" fill="#c2b8aa" stroke="#a09688" stroke-width="1.5"/>
+  <!-- Cabinet body -->
+  <rect x="80" y="74" width="240" height="170" rx="2" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.5"/>
+  <!-- Left door -->
+  <rect x="90" y="82" width="110" height="154" rx="2" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Right door -->
+  <rect x="205" y="82" width="110" height="154" rx="2" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Left handle -->
+  <rect x="185" y="140" width="6" height="40" rx="3" fill="#8a8278"/>
+  <!-- Right handle -->
+  <rect x="215" y="140" width="6" height="40" rx="3" fill="#8a8278"/>
+  <!-- Plinth -->
+  <rect x="83" y="250" width="234" height="16" rx="1" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="1"/>
+  <!-- Legs -->
+  <rect x="96" y="266" width="8" height="14" rx="1" fill="#a09688"/>
+  <rect x="296" y="266" width="8" height="14" rx="1" fill="#a09688"/>
+  <!-- Dimension label -->
+  <line x1="80" y1="290" x2="320" y2="290" stroke="#a09688" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <line x1="80" y1="286" x2="80" y2="294" stroke="#a09688" stroke-width="0.8"/>
+  <line x1="320" y1="286" x2="320" y2="294" stroke="#a09688" stroke-width="0.8"/>
+  <text x="200" y="298" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#8a8278">80 cm</text>
+</svg>

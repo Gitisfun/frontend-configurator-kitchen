@@ -1,0 +1,562 @@
+/**
+ * Theme overrides for DE KEUKEN FABRIEK
+ * Applied via data-theme attribute on <html>.
+ * The default "classic" theme uses the base variables from theme.css.
+ */
+
+/* =========================================================================
+   Theme: Warm Earth
+   Tuscan farmhouse kitchen — terracotta tiles, olive wood, hand-thrown ceramics
+   Fonts: Libre Baskerville (serif) + Source Sans 3 (sans)
+   ========================================================================= */
+[data-theme='warm-earth'] {
+  --color-text-primary: #3D2E2A;
+  --color-text-muted: #7A6A63;
+  --color-text-muted-strong: #5C4940;
+  --color-text-muted-light: #A8978E;
+  --color-text-light: #ffffff;
+
+  --color-brand: #C2714F;
+  --color-brand-hover: #A85D3F;
+
+  --color-brand-secondary: #3D2E2A;
+  --color-brand-secondary-hover: #2E211E;
+
+  --color-border: #3D2E2A;
+  --color-surface: #FDFAF7;
+  --color-surface-hover: #F5EDE6;
+  --color-error: #B94040;
+  --color-error-muted: #D06060;
+  --color-success: #6A8F5B;
+  --color-success-muted: #EAF2E6;
+  --color-info: #3D2E2A;
+  --color-info-muted: #F0EAE4;
+  --color-warning: #B07C2A;
+  --color-warning-muted: #FAF0DD;
+
+  --font-sans: 'Source Sans 3', sans-serif;
+  --font-serif: 'Libre Baskerville', serif;
+
+  --letter-spacing-tight: 0.005em;
+  --line-height-heading: 1.35;
+
+  --picker-border: #E0D5CC;
+  --panel-border-color: #E0D5CC;
+  --panel-overlay-bg: rgba(61, 46, 42, 0.4);
+  --toast-shadow: 0 4px 12px rgba(61, 46, 42, 0.15);
+
+  --navbar-bg-scrolled: rgba(253, 250, 247, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(61, 46, 42, 0.06);
+
+  --footer-bg: #3D2E2A;
+  --footer-border-color: rgba(255, 255, 255, 0.12);
+
+  --button-primary-bg: #C2714F;
+  --button-primary-bg-hover: #A85D3F;
+}
+
+/* =========================================================================
+   Theme: Midnight Modern
+   Manhattan penthouse — blue-lit backsplash, dark cabinetry, city views
+   Fonts: DM Serif Display (serif) + DM Sans (sans)
+   ========================================================================= */
+[data-theme='midnight'] {
+  --color-text-primary: #E8ECF1;
+  --color-text-muted: #8A96A8;
+  --color-text-muted-strong: #B0BAC8;
+  --color-text-muted-light: #5A6578;
+  --color-text-light: #ffffff;
+
+  --color-brand: #4F9CF7;
+  --color-brand-hover: #3A85E0;
+
+  --color-brand-secondary: #1C2435;
+  --color-brand-secondary-hover: #151B2A;
+
+  --color-border: #3A4560;
+  --color-surface: #141820;
+  --color-surface-hover: #1C2230;
+  --color-error: #F06060;
+  --color-error-muted: #F08080;
+  --color-success: #4CAF7D;
+  --color-success-muted: rgba(76, 175, 125, 0.12);
+  --color-info: #4F9CF7;
+  --color-info-muted: rgba(79, 156, 247, 0.12);
+  --color-warning: #E0A030;
+  --color-warning-muted: rgba(224, 160, 48, 0.12);
+
+  --font-sans: 'DM Sans', sans-serif;
+  --font-serif: 'DM Serif Display', serif;
+
+  --letter-spacing-tight: 0.01em;
+  --line-height-heading: 1.25;
+
+  --picker-bg: #1C2230;
+  --picker-bg-hover: #242C3C;
+  --picker-border: #2A3345;
+  --picker-label-color: #8A96A8;
+  --picker-value-color: #B0BAC8;
+
+  --panel-border-color: #2A3345;
+  --panel-bg: #1C2230;
+  --panel-overlay-bg: rgba(10, 12, 18, 0.7);
+  --panel-shadow: -4px 0 24px rgba(0, 0, 0, 0.3);
+  --toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+
+  --navbar-bg-scrolled: rgba(20, 24, 32, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(0, 0, 0, 0.2);
+  --navbar-link-color-transparent: #E8ECF1;
+  --navbar-logo-filter: brightness(0) invert(1);
+  --navbar-logo-filter-scrolled: brightness(0) invert(1);
+
+  --footer-bg: #0D1117;
+  --footer-text-color: #E8ECF1;
+  --footer-text-muted: rgba(232, 236, 241, 0.5);
+  --footer-heading-color: #E8ECF1;
+  --footer-border-color: rgba(255, 255, 255, 0.08);
+
+  --button-primary-bg: #4F9CF7;
+  --button-primary-bg-hover: #3A85E0;
+  --button-primary-color: #0D1117;
+  --button-outlined-bg: transparent;
+  --button-outlined-color: #8A96A8;
+  --button-outlined-border: #3A4560;
+  --button-outlined-hover-bg: #1C2230;
+  --button-light-bg: #1C2230;
+  --button-light-color: #E8ECF1;
+  --button-light-hover-bg: #242C3C;
+  --button-dark-bg: #E8ECF1;
+  --button-dark-color: #141820;
+  --button-dark-hover-bg: #CDD3DC;
+  --button-focus-ring: 2px solid #4F9CF7;
+}
+
+/* =========================================================================
+   Theme: Sage & Stone
+   Scandinavian cabin — birch counters, matte ceramics, morning fog
+   Fonts: Lora (serif) + Nunito Sans (sans)
+   ========================================================================= */
+[data-theme='sage'] {
+  --color-text-primary: #2C3E3A;
+  --color-text-muted: #6B7F7A;
+  --color-text-muted-strong: #4A5E58;
+  --color-text-muted-light: #96A8A2;
+  --color-text-light: #ffffff;
+
+  --color-brand: #7C9A82;
+  --color-brand-hover: #668A6E;
+
+  --color-brand-secondary: #2C3E3A;
+  --color-brand-secondary-hover: #1E2E2A;
+
+  --color-border: #2C3E3A;
+  --color-surface: #F8F9F7;
+  --color-surface-hover: #EFF2ED;
+  --color-error: #C25050;
+  --color-error-muted: #D87070;
+  --color-success: #7C9A82;
+  --color-success-muted: #E8F0EA;
+  --color-info: #2C3E3A;
+  --color-info-muted: #E6EEEB;
+  --color-warning: #B08C40;
+  --color-warning-muted: #F5EDD8;
+
+  --font-sans: 'Nunito Sans', sans-serif;
+  --font-serif: 'Lora', serif;
+
+  --letter-spacing-tight: 0em;
+  --letter-spacing-body: 0.015em;
+  --line-height-heading: 1.35;
+
+  --picker-border: #D8DDD6;
+  --panel-border-color: #D8DDD6;
+  --panel-overlay-bg: rgba(44, 62, 58, 0.4);
+  --toast-shadow: 0 4px 12px rgba(44, 62, 58, 0.12);
+
+  --navbar-bg-scrolled: rgba(248, 249, 247, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(44, 62, 58, 0.05);
+
+  --footer-bg: #2C3E3A;
+  --footer-border-color: rgba(255, 255, 255, 0.12);
+
+  --button-primary-bg: #7C9A82;
+  --button-primary-bg-hover: #668A6E;
+  --button-focus-ring: 2px solid #2C3E3A;
+}
+
+/* =========================================================================
+   Theme: Noir & Gold
+   Showroom luxury — black marble island, brass fixtures, champagne glow
+   Fonts: Playfair Display (serif) + Outfit (sans)
+   ========================================================================= */
+[data-theme='noir'] {
+  --color-text-primary: #F0ECE3;
+  --color-text-muted: #A09888;
+  --color-text-muted-strong: #C4BAA8;
+  --color-text-muted-light: #6E665A;
+  --color-text-light: #ffffff;
+
+  --color-brand: #C9A84C;
+  --color-brand-hover: #B89540;
+
+  --color-brand-secondary: #2A2520;
+  --color-brand-secondary-hover: #1E1A16;
+
+  --color-border: #4A4238;
+  --color-surface: #1A1A1A;
+  --color-surface-hover: #242424;
+  --color-error: #E06050;
+  --color-error-muted: #E88070;
+  --color-success: #8AAB6A;
+  --color-success-muted: rgba(138, 171, 106, 0.12);
+  --color-info: #C9A84C;
+  --color-info-muted: rgba(201, 168, 76, 0.12);
+  --color-warning: #D4A840;
+  --color-warning-muted: rgba(212, 168, 64, 0.12);
+
+  --font-sans: 'Outfit', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+
+  --letter-spacing-tight: 0.02em;
+  --letter-spacing-body: 0.025em;
+  --letter-spacing-button: 1px;
+  --line-height-heading: 1.25;
+
+  --picker-bg: #242424;
+  --picker-bg-hover: #2E2E2E;
+  --picker-border: #3A3530;
+  --picker-label-color: #A09888;
+  --picker-value-color: #C4BAA8;
+
+  --panel-border-color: #3A3530;
+  --panel-bg: #242424;
+  --panel-overlay-bg: rgba(10, 10, 10, 0.7);
+  --panel-shadow: -4px 0 24px rgba(0, 0, 0, 0.4);
+  --toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+
+  --navbar-bg-scrolled: rgba(26, 26, 26, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(0, 0, 0, 0.3);
+  --navbar-link-color-transparent: #F0ECE3;
+  --navbar-logo-filter: brightness(0) invert(1);
+  --navbar-logo-filter-scrolled: brightness(0) invert(1);
+
+  --footer-bg: #111111;
+  --footer-text-color: #F0ECE3;
+  --footer-text-muted: rgba(240, 236, 227, 0.5);
+  --footer-heading-color: #C9A84C;
+  --footer-border-color: rgba(201, 168, 76, 0.15);
+
+  --button-primary-bg: #C9A84C;
+  --button-primary-bg-hover: #B89540;
+  --button-primary-color: #1A1A1A;
+  --button-outlined-bg: transparent;
+  --button-outlined-color: #A09888;
+  --button-outlined-border: #4A4238;
+  --button-outlined-hover-bg: #242424;
+  --button-light-bg: #242424;
+  --button-light-color: #F0ECE3;
+  --button-light-hover-bg: #2E2E2E;
+  --button-dark-bg: #F0ECE3;
+  --button-dark-color: #1A1A1A;
+  --button-dark-hover-bg: #DDD6C8;
+  --button-focus-ring: 2px solid #C9A84C;
+}
+
+/* =========================================================================
+   Theme: Coastal Breeze
+   Beach-house kitchen — whitewashed shiplap, driftwood shelves, ocean view
+   Fonts: Merriweather (serif) + Inter (sans)
+   ========================================================================= */
+[data-theme='coastal'] {
+  --color-text-primary: #2A3D52;
+  --color-text-muted: #5E7A8F;
+  --color-text-muted-strong: #3E5E75;
+  --color-text-muted-light: #94B0C4;
+  --color-text-light: #ffffff;
+
+  --color-brand: #3A8FB7;
+  --color-brand-hover: #2E7A9E;
+
+  --color-brand-secondary: #2A3D52;
+  --color-brand-secondary-hover: #1F2E3E;
+
+  --color-border: #2A3D52;
+  --color-surface: #F9FBFD;
+  --color-surface-hover: #EEF4F8;
+  --color-error: #C44E4E;
+  --color-error-muted: #E07070;
+  --color-success: #4DA87A;
+  --color-success-muted: #E4F5ED;
+  --color-info: #3A8FB7;
+  --color-info-muted: #E4F0F7;
+  --color-warning: #C09030;
+  --color-warning-muted: #FBF3E0;
+
+  --font-sans: 'Inter', sans-serif;
+  --font-serif: 'Merriweather', serif;
+
+  --letter-spacing-tight: 0em;
+  --letter-spacing-body: 0.01em;
+  --line-height-heading: 1.35;
+
+  --picker-border: #D4DFE8;
+  --panel-border-color: #D4DFE8;
+  --panel-overlay-bg: rgba(42, 61, 82, 0.35);
+  --toast-shadow: 0 4px 12px rgba(42, 61, 82, 0.12);
+
+  --navbar-bg-scrolled: rgba(249, 251, 253, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(42, 61, 82, 0.05);
+
+  --footer-bg: #2A3D52;
+  --footer-border-color: rgba(255, 255, 255, 0.12);
+
+  --button-primary-bg: #3A8FB7;
+  --button-primary-bg-hover: #2E7A9E;
+  --button-focus-ring: 2px solid #3A8FB7;
+}
+
+/* =========================================================================
+   Theme: Industrial Loft
+   Urban warehouse conversion — concrete counters, steel shelving, Edison bulbs
+   Fonts: Roboto Slab (serif) + Roboto (sans)
+   ========================================================================= */
+[data-theme='industrial'] {
+  --color-text-primary: #E0DCD6;
+  --color-text-muted: #9A948C;
+  --color-text-muted-strong: #BDB7AE;
+  --color-text-muted-light: #6A645C;
+  --color-text-light: #ffffff;
+
+  --color-brand: #D4804A;
+  --color-brand-hover: #C06E3A;
+
+  --color-brand-secondary: #2C2824;
+  --color-brand-secondary-hover: #201D1A;
+
+  --color-border: #4A443C;
+  --color-surface: #1E1C1A;
+  --color-surface-hover: #2A2826;
+  --color-error: #E06050;
+  --color-error-muted: #E88070;
+  --color-success: #7AAE60;
+  --color-success-muted: rgba(122, 174, 96, 0.12);
+  --color-info: #D4804A;
+  --color-info-muted: rgba(212, 128, 74, 0.12);
+  --color-warning: #D4A040;
+  --color-warning-muted: rgba(212, 160, 64, 0.12);
+
+  --font-sans: 'Roboto', sans-serif;
+  --font-serif: 'Roboto Slab', serif;
+
+  --letter-spacing-tight: 0.01em;
+  --letter-spacing-body: 0.02em;
+  --letter-spacing-button: 0.8px;
+  --line-height-heading: 1.3;
+
+  --picker-bg: #2A2826;
+  --picker-bg-hover: #353230;
+  --picker-border: #3E3A36;
+  --picker-label-color: #9A948C;
+  --picker-value-color: #BDB7AE;
+
+  --panel-border-color: #3E3A36;
+  --panel-bg: #2A2826;
+  --panel-overlay-bg: rgba(14, 13, 12, 0.7);
+  --panel-shadow: -4px 0 24px rgba(0, 0, 0, 0.35);
+  --toast-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  --navbar-bg-scrolled: rgba(30, 28, 26, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(0, 0, 0, 0.25);
+  --navbar-link-color-transparent: #E0DCD6;
+  --navbar-logo-filter: brightness(0) invert(1);
+  --navbar-logo-filter-scrolled: brightness(0) invert(1);
+
+  --footer-bg: #141210;
+  --footer-text-color: #E0DCD6;
+  --footer-text-muted: rgba(224, 220, 214, 0.5);
+  --footer-heading-color: #D4804A;
+  --footer-border-color: rgba(212, 128, 74, 0.15);
+
+  --button-primary-bg: #D4804A;
+  --button-primary-bg-hover: #C06E3A;
+  --button-primary-color: #1E1C1A;
+  --button-outlined-bg: transparent;
+  --button-outlined-color: #9A948C;
+  --button-outlined-border: #4A443C;
+  --button-outlined-hover-bg: #2A2826;
+  --button-light-bg: #2A2826;
+  --button-light-color: #E0DCD6;
+  --button-light-hover-bg: #353230;
+  --button-dark-bg: #E0DCD6;
+  --button-dark-color: #1E1C1A;
+  --button-dark-hover-bg: #C8C4BE;
+  --button-focus-ring: 2px solid #D4804A;
+}
+
+/* =========================================================================
+   Theme: Japanese Zen
+   Wabi-sabi kitchen — hinoki wood, ceramic bowls, rice-paper light
+   Fonts: Noto Serif (serif) + Noto Sans (sans)
+   ========================================================================= */
+[data-theme='zen'] {
+  --color-text-primary: #2C2C28;
+  --color-text-muted: #6E6E65;
+  --color-text-muted-strong: #4A4A42;
+  --color-text-muted-light: #A5A59A;
+  --color-text-light: #ffffff;
+
+  --color-brand: #3B5998;
+  --color-brand-hover: #2E4A80;
+
+  --color-brand-secondary: #2C2C28;
+  --color-brand-secondary-hover: #1E1E1B;
+
+  --color-border: #2C2C28;
+  --color-surface: #FAF9F6;
+  --color-surface-hover: #F0EEE8;
+  --color-error: #C04040;
+  --color-error-muted: #D86060;
+  --color-success: #5A8F60;
+  --color-success-muted: #E6F2E8;
+  --color-info: #3B5998;
+  --color-info-muted: #E8ECF4;
+  --color-warning: #A88830;
+  --color-warning-muted: #F5F0DD;
+
+  --font-sans: 'Noto Sans', sans-serif;
+  --font-serif: 'Noto Serif', serif;
+
+  --letter-spacing-tight: 0.02em;
+  --letter-spacing-body: 0.025em;
+  --line-height-heading: 1.4;
+  --line-height-body: 1.8;
+
+  --picker-border: #DDD8D0;
+  --panel-border-color: #DDD8D0;
+  --panel-overlay-bg: rgba(44, 44, 40, 0.35);
+  --toast-shadow: 0 4px 12px rgba(44, 44, 40, 0.1);
+
+  --navbar-bg-scrolled: rgba(250, 249, 246, 0.95);
+  --navbar-shadow-scrolled: 0 1px 6px rgba(44, 44, 40, 0.04);
+
+  --footer-bg: #2C2C28;
+  --footer-border-color: rgba(255, 255, 255, 0.1);
+
+  --button-primary-bg: #3B5998;
+  --button-primary-bg-hover: #2E4A80;
+  --button-focus-ring: 2px solid #3B5998;
+}
+
+/* =========================================================================
+   Theme: French Bistro
+   Parisian pâtisserie — marble counters, burgundy tiles, copper pans
+   Fonts: Cormorant Garamond (serif) + Raleway (sans)
+   ========================================================================= */
+[data-theme='bistro'] {
+  --color-text-primary: #2E1F2E;
+  --color-text-muted: #6E5A6E;
+  --color-text-muted-strong: #4A3A4A;
+  --color-text-muted-light: #A090A0;
+  --color-text-light: #ffffff;
+
+  --color-brand: #8C2F4E;
+  --color-brand-hover: #742640;
+
+  --color-brand-secondary: #2E1F2E;
+  --color-brand-secondary-hover: #201520;
+
+  --color-border: #2E1F2E;
+  --color-surface: #FDF9F7;
+  --color-surface-hover: #F6EDE8;
+  --color-error: #B83A3A;
+  --color-error-muted: #D05050;
+  --color-success: #5A8A5A;
+  --color-success-muted: #E6F2E6;
+  --color-info: #8C2F4E;
+  --color-info-muted: #F5E8EE;
+  --color-warning: #B88530;
+  --color-warning-muted: #FAF0DD;
+
+  --font-sans: 'Raleway', sans-serif;
+  --font-serif: 'Cormorant Garamond', serif;
+
+  --letter-spacing-tight: 0.01em;
+  --letter-spacing-body: 0.015em;
+  --letter-spacing-button: 1.2px;
+  --line-height-heading: 1.3;
+
+  --header-size-big: 44px;
+  --header-size-big-desktop: 62px;
+  --header-size-medium: 32px;
+  --header-size-medium-desktop: 44px;
+
+  --picker-border: #E0D4CE;
+  --panel-border-color: #E0D4CE;
+  --panel-overlay-bg: rgba(46, 31, 46, 0.4);
+  --toast-shadow: 0 4px 12px rgba(46, 31, 46, 0.12);
+
+  --navbar-bg-scrolled: rgba(253, 249, 247, 0.95);
+  --navbar-shadow-scrolled: 0 2px 10px rgba(46, 31, 46, 0.05);
+
+  --footer-bg: #2E1F2E;
+  --footer-border-color: rgba(255, 255, 255, 0.12);
+
+  --button-primary-bg: #8C2F4E;
+  --button-primary-bg-hover: #742640;
+  --button-focus-ring: 2px solid #8C2F4E;
+}
+
+/* =========================================================================
+   Theme: Arctic Snow
+   Nordic minimalist — white quartz, pale ash, under-cabinet strip lights
+   Fonts: Space Grotesk (serif headings) + Poppins (sans)
+   ========================================================================= */
+[data-theme='arctic'] {
+  --color-text-primary: #1A2030;
+  --color-text-muted: #5A6578;
+  --color-text-muted-strong: #3A4558;
+  --color-text-muted-light: #8A95A8;
+  --color-text-light: #ffffff;
+
+  --color-brand: #1AA8A0;
+  --color-brand-hover: #148F88;
+
+  --color-brand-secondary: #1A2030;
+  --color-brand-secondary-hover: #101520;
+
+  --color-border: #1A2030;
+  --color-surface: #FAFBFC;
+  --color-surface-hover: #EEF1F5;
+  --color-error: #D04848;
+  --color-error-muted: #E06868;
+  --color-success: #1AA8A0;
+  --color-success-muted: #E2F5F4;
+  --color-info: #1A2030;
+  --color-info-muted: #E8ECF2;
+  --color-warning: #C09030;
+  --color-warning-muted: #FBF3E0;
+
+  --font-sans: 'Poppins', sans-serif;
+  --font-serif: 'Space Grotesk', sans-serif;
+
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-body: 0.01em;
+  --line-height-heading: 1.25;
+  --font-weight-medium: 500;
+
+  --picker-border: #D8DDE5;
+  --panel-border-color: #D8DDE5;
+  --panel-overlay-bg: rgba(26, 32, 48, 0.3);
+  --toast-shadow: 0 4px 12px rgba(26, 32, 48, 0.1);
+
+  --navbar-bg-scrolled: rgba(250, 251, 252, 0.95);
+  --navbar-shadow-scrolled: 0 1px 8px rgba(26, 32, 48, 0.04);
+
+  --footer-bg: #1A2030;
+  --footer-border-color: rgba(255, 255, 255, 0.1);
+
+  --button-primary-bg: #1AA8A0;
+  --button-primary-bg-hover: #148F88;
+  --button-radius-rounded: 10px;
+  --button-focus-ring: 2px solid #1AA8A0;
+}

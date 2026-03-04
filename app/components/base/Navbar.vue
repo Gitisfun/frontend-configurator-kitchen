@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar" :style="navbarStyle">
+  <nav :class="['navbar', { 'navbar--scrolled': scrolled }]" :style="navbarStyle">
     <NuxtLink to="/" class="logo-link">
       <img src="/logo_dekeukenfabriek_kleur.png" alt="DE KEUKEN FABRIEK" class="logo" />
     </NuxtLink>
@@ -7,13 +7,15 @@
       <NuxtLink to="/" class="nav-link">Home</NuxtLink>
       <NuxtLink to="/about" class="nav-link">About</NuxtLink>
       <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
-      <BaseCart :item-count="cartItemCount" :total="cartTotal" />
+      <BaseThemeSwitcher />
+      <BaseCart :item-count="cartStore.itemCount" :total="cartStore.total" :items="cartStore.itemsForDropdown" />
     </div>
   </nav>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { useCartStore } from '../../../stores/cart';
 
 interface Props {
   /** When true, use primary link color and solid bar (for pages with white background). */
@@ -24,9 +26,7 @@ const props = withDefaults(defineProps<Props>(), {
   lightPage: false,
 });
 
-/** Hardcoded for now; replace with cart store/composable later */
-const cartItemCount = ref(2);
-const cartTotal = ref(230);
+const cartStore = useCartStore();
 
 const SCROLL_THRESHOLD = 80;
 const scrollProgress = ref(0);
@@ -36,27 +36,14 @@ function updateScroll() {
   scrollProgress.value = Math.min(scrollTop / SCROLL_THRESHOLD, 1);
 }
 
-function lerpColor(from: [number, number, number], to: [number, number, number], t: number): string {
-  const r = Math.round(from[0] + (to[0] - from[0]) * t);
-  const g = Math.round(from[1] + (to[1] - from[1]) * t);
-  const b = Math.round(from[2] + (to[2] - from[2]) * t);
-  return `rgb(${r}, ${g}, ${b})`;
-}
-
-const WHITE: [number, number, number] = [255, 255, 255];
-const PRIMARY: [number, number, number] = [27, 58, 92];
-
 const navbarStyle = computed(() => {
   const p = props.lightPage ? 1 : scrollProgress.value;
-  const linkColor = lerpColor(WHITE, PRIMARY, p);
   return {
-    backgroundColor: `rgba(255, 255, 255, ${0.95 * p})`,
-    backdropFilter: `blur(${10 * p}px)`,
-    WebkitBackdropFilter: `blur(${10 * p}px)`,
-    boxShadow: `0 2px 10px rgba(0, 0, 0, ${0.05 * p})`,
-    '--nav-link-color': linkColor,
+    '--navbar-scroll-progress': p,
   } as Record<string, string>;
 });
+
+const scrolled = computed(() => (props.lightPage ? true : scrollProgress.value > 0.5));
 
 onMounted(() => {
   updateScroll();
@@ -79,7 +66,18 @@ onUnmounted(() => {
   align-items: center;
   padding: var(--navbar-padding-y) var(--navbar-padding-x);
   z-index: 100;
-  opacity: 0.95;
+  background-color: transparent;
+  backdrop-filter: blur(0px);
+  -webkit-backdrop-filter: blur(0px);
+  box-shadow: none;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, backdrop-filter 0.3s ease;
+}
+
+.navbar--scrolled {
+  background-color: var(--navbar-bg-scrolled, rgba(255, 255, 255, 0.95));
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  box-shadow: var(--navbar-shadow-scrolled, 0 2px 10px rgba(0, 0, 0, 0.05));
 }
 
 .logo-link {
@@ -96,6 +94,12 @@ onUnmounted(() => {
 .logo {
   height: var(--navbar-logo-height);
   width: auto;
+  filter: var(--navbar-logo-filter, none);
+  transition: filter 0.3s ease;
+}
+
+.navbar--scrolled .logo {
+  filter: var(--navbar-logo-filter-scrolled, none);
 }
 
 .nav-links {
@@ -108,7 +112,7 @@ onUnmounted(() => {
   font-family: var(--font-sans);
   font-size: var(--navbar-link-font-size);
   font-weight: var(--font-weight-medium);
-  color: var(--nav-link-color, var(--navbar-link-color));
+  color: var(--navbar-link-color-transparent, #fff);
   text-decoration: none;
   letter-spacing: var(--letter-spacing-wide);
   position: relative;
@@ -117,6 +121,10 @@ onUnmounted(() => {
   text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar--scrolled .nav-link {
+  color: var(--navbar-link-color);
 }
 
 .nav-link::after {
