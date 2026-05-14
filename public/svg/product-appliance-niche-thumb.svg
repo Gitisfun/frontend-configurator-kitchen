@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" fill="#f5f1ec"/>
+  <!-- Cabinet body -->
+  <rect x="55" y="10" width="90" height="175" rx="2" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Top door -->
+  <rect x="62" y="16" width="76" height="32" rx="1.5" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1"/>
+  <rect x="130" y="26" width="3" height="14" rx="1.5" fill="#8a8278"/>
+  <!-- Niche -->
+  <rect x="62" y="52" width="76" height="90" rx="1.5" fill="#d8d2c8" stroke="#b5ad9e" stroke-width="1"/>
+  <!-- Fridge silhouette -->
+  <rect x="66" y="56" width="68" height="82" rx="2" fill="#e0dbd3" stroke="#c2b8aa" stroke-width="0.8"/>
+  <rect x="128" y="72" width="2.5" height="26" rx="1.25" fill="#b5ad9e"/>
+  <line x1="69" y1="106" x2="131" y2="106" stroke="#c2b8aa" stroke-width="0.6"/>
+  <!-- Bottom door -->
+  <rect x="62" y="146" width="76" height="34" rx="1.5" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1"/>
+  <rect x="130" y="156" width="3" height="14" rx="1.5" fill="#8a8278"/>
+  <!-- Plinth -->
+  <rect x="58" y="185" width="84" height="6" rx="1" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="0.6"/>
+</svg>

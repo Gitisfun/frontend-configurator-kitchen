@@ -9,12 +9,8 @@
       <div class="configurator-main__inner">
         <div class="configurator-main__media">
           <div class="configurator-main__canvas-wrap">
-            <div
-              ref="canvasContainerRef"
-              class="configurator-main__canvas-host"
-              :class="{ 'configurator-main__canvas-host--ready': modelLoaded }"
-              aria-hidden="true"
-            />
+            <div ref="canvasContainerRef" class="configurator-main__canvas-host" :class="{ 'configurator-main__canvas-host--ready': modelLoaded }" aria-hidden="true" />
+            <img v-if="modelLoaded && handleSelection?.image" :key="handleSelection.id" :src="handleSelection.image" :alt="handleSelection.title ?? ''" class="configurator-main__handle-overlay" aria-hidden="true" />
             <div v-if="!modelLoaded" class="configurator-main__canvas-loading" role="status" aria-live="polite">
               <span class="configurator-main__spinner" />
             </div>
@@ -24,7 +20,7 @@
           <BasePicker :label="PICKER_LABEL_FRONT" type="color" :value="frontSelection?.image ?? null" :error="showPickerErrors && !frontSelection" error-message="Please select a front color" @click="onPickerClick(PICKER_KEY_FRONT)" />
           <BasePicker :label="PICKER_LABEL_SIDE_PANEL" type="color" :value="sideSelection?.image ?? null" :error="showPickerErrors && !sideSelection" error-message="Please select a side panel" @click="onPickerClick(PICKER_KEY_SIDE_PANEL)" />
           <BasePicker :label="PICKER_LABEL_PLINTH" type="color" :value="plinthSelection?.image ?? null" :error="showPickerErrors && !plinthSelection" error-message="Please select a plinth color" @click="onPickerClick(PICKER_KEY_PLINTH)" />
-          <BasePicker :label="PICKER_LABEL_HANDLE" type="text" :value="handleSelection?.title ?? null" :error="showPickerErrors && !handleSelection" error-message="Please select a handle type" @click="onPickerClick(PICKER_KEY_HANDLE)" />
+          <BasePicker :label="PICKER_LABEL_HANDLE" type="image" :value="handleSelection?.image ? { src: handleSelection.image, alt: handleSelection.title } : null" :error="showPickerErrors && !handleSelection" error-message="Please select a handle type" @click="onPickerClick(PICKER_KEY_HANDLE)" />
         </div>
         <div class="configurator-main__actions">
           <BaseButtons back-label="Back" next-label="Next" @back="onBack" @next="onNext" />
@@ -156,6 +152,34 @@ function onNext() {
   width: 100% !important;
   height: 100% !important;
   object-fit: contain;
+}
+
+.configurator-main__handle-overlay {
+  position: absolute;
+  top: 52%;
+  left: 30%;
+  width: 13%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 0.5px 0.5px rgba(255, 255, 255, 0.45)) drop-shadow(0 1px 1px rgba(0, 0, 0, 0.18)) drop-shadow(0 3px 6px rgba(0, 0, 0, 0.22)) drop-shadow(0 6px 12px rgba(0, 0, 0, 0.12));
+  animation: handle-overlay-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  will-change: transform, filter;
+  z-index: 1;
+}
+
+@keyframes handle-overlay-in {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.85);
+    filter: drop-shadow(0 0 0 transparent);
+  }
+  100% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1);
+  }
 }
 
 .configurator-main__canvas-loading {

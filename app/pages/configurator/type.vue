@@ -8,14 +8,21 @@
           <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-type-page__title"> selecteer kasten </BaseHeader>
           <BaseParagraph size="medium" align="left" color="primary" class="configurator-type-page__description"> selecteer hier de kast groep waar je mee wil beginnen </BaseParagraph>
 
-          <div class="configurator-type-page__radios" role="radiogroup" aria-label="Kast groep">
-            <BaseRadioButton v-for="option in CONFIGURATOR_TYPE_OPTIONS" :key="option.id" v-model="selectedTypeValue" :name="radioGroupName" :value="option.value" :label="option.label" @hover="onRadioHover" @hover-end="onRadioHoverEnd" />
+          <p v-if="categoriesError" class="configurator-type-page__error">Kastgroepen laden is mislukt. Probeer de pagina te vernieuwen.</p>
+          <div v-else-if="categoriesPending" class="configurator-type-page__radios configurator-type-page__radios--skeleton" aria-busy="true" aria-label="Kastgroepen laden">
+            <div v-for="n in 3" :key="n" class="configurator-type-page__radio-skeleton" />
+          </div>
+          <p v-else-if="typeOptions.length === 0" class="configurator-type-page__empty">Er zijn nog geen kastgroepen beschikbaar.</p>
+          <div v-else class="configurator-type-page__radios" role="radiogroup" aria-label="Kast groep">
+            <BaseRadioButton v-for="option in typeOptions" :key="option.id" v-model="selectedTypeValue" :name="radioGroupName" :value="option.value" :label="option.label" @hover="onRadioHover" @hover-end="onRadioHoverEnd" />
           </div>
 
           <div class="configurator-type-page__design">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-type-page__design-title"> Jouw ontwerp </BaseHeader>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Front: sneeuwwit mat kunststof Greep/knop: greep 174 </BaseParagraph>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Kastkleur: sneeuwwit Plintkleur: sneeuwwit mat kunststof </BaseParagraph>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Front: {{ frontSummary }} </BaseParagraph>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Greep/knop: {{ handleSummary }} </BaseParagraph>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Kastkleur: {{ sideSummary }}</BaseParagraph>
+            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Plintkleur: {{ plinthSummary }} </BaseParagraph>
             <NuxtLink to="/configurator" class="configurator-type-page__change-link">wijzigen</NuxtLink>
           </div>
         </div>
@@ -41,20 +48,49 @@
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useConfiguratorState } from '../../composables/useConfiguratorState';
+import { useCategories } from '../../composables/useCategories';
 import { useModelViewer } from '../../composables/useModelViewer';
 import { useToast } from '../../composables/useToast';
-import { CONFIGURATOR_TYPE_OPTIONS } from '../../constants/dummy';
 
 const route = useRoute();
 const router = useRouter();
 const toast = useToast();
 const canvasContainerRef = ref<HTMLElement | null>(null);
 
-const { plinthSelection, frontSelection, sideSelection } = useConfiguratorState();
+const { plinthSelection, frontSelection, sideSelection, handleSelection } = useConfiguratorState();
+
+function selectionTitle(sel: { title?: string | null } | null | undefined): string {
+  const t = sel?.title?.trim();
+  return t ? t : '—';
+}
+
+const frontSummary = computed(() => selectionTitle(frontSelection.value));
+const handleSummary = computed(() => selectionTitle(handleSelection.value));
+const sideSummary = computed(() => selectionTitle(sideSelection.value));
+const plinthSummary = computed(() => selectionTitle(plinthSelection.value));
 const radioGroupName = 'configurator-type';
 const selectedTypeValue = ref((route.query.type as string) ?? '');
 const previewType = ref<string | null>(null);
 const displayType = computed(() => previewType.value ?? selectedTypeValue.value);
+
+const { categories, pending: categoriesPending, error: categoriesError } = useCategories();
+
+/** Radio rows: Strapi `value` drives `type` query (fallback to document id if empty). */
+const typeOptions = computed(() =>
+  categories.value.map((c) => ({
+    id: c.id,
+    value: c.value.trim() || c.id,
+    label: c.name,
+  })),
+);
+
+watch(typeOptions, (opts) => {
+  if (!opts.length) return;
+  const v = selectedTypeValue.value;
+  if (v && !opts.some((o) => o.value === v)) {
+    selectedTypeValue.value = '';
+  }
+});
 
 function onRadioHover(value: string) {
   previewType.value = value;
@@ -84,13 +120,16 @@ function onBack() {
 
 function onNext() {
   const value = selectedTypeValue.value;
-  const option = CONFIGURATOR_TYPE_OPTIONS.find((o) => o.value === value);
-  if (!option) {
+  const option = typeOptions.value.find((o) => o.value === value);
+  if (!option || categoriesError.value) {
     toast.warning('Selecteer een kast groep om verder te gaan.');
     return;
   }
   router.replace({ path: '/configurator/type', query: { type: option.value } });
-  router.push({ path: '/configurator/subcategories', query: { type: option.value } });
+  router.push({
+    path: '/configurator/subcategories',
+    query: { type: option.value, category: option.id },
+  });
 }
 </script>
 
@@ -166,6 +205,42 @@ function onNext() {
 .configurator-type-page__radios :deep(.radio:has(.radio__input:checked)) {
   border-color: var(--color-brand);
   background-color: var(--color-surface-hover);
+}
+
+.configurator-type-page__error {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: 14px;
+  color: var(--color-danger, #c0392b);
+}
+
+.configurator-type-page__empty {
+  margin: 0;
+  font-family: var(--font-sans);
+  font-size: var(--paragraph-size-medium);
+  color: var(--color-text-muted);
+}
+
+.configurator-type-page__radios--skeleton {
+  pointer-events: none;
+}
+
+.configurator-type-page__radio-skeleton {
+  height: 48px;
+  border-radius: var(--picker-radius);
+  border: 1px solid var(--picker-border);
+  background: linear-gradient(90deg, var(--color-surface-hover) 25%, var(--picker-border) 50%, var(--color-surface-hover) 75%);
+  background-size: 200% 100%;
+  animation: configurator-type-shimmer 1.4s ease infinite;
+}
+
+@keyframes configurator-type-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .configurator-type-page__design {

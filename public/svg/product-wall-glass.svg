@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" fill="none">
+  <rect width="600" height="400" fill="#f5f1ec"/>
+
+  <!-- Wall background hint -->
+  <rect x="120" y="20" width="360" height="360" rx="0" fill="#ede9e3" opacity="0.4"/>
+
+  <!-- Wall mounting line -->
+  <line x1="140" y1="56" x2="460" y2="56" stroke="#d5cfc5" stroke-width="1" stroke-dasharray="8 5"/>
+
+  <!-- Cabinet body -->
+  <rect x="190" y="64" width="220" height="270" rx="2" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.5"/>
+
+  <!-- Glass door -->
+  <rect x="202" y="74" width="196" height="250" rx="2" fill="#e8ecef" stroke="#b5ad9e" stroke-width="1.2" opacity="0.85"/>
+  <!-- Glass reflection -->
+  <path d="M210 80 L230 74 L230 320 L210 324 Z" fill="#f0f3f5" opacity="0.3"/>
+  <path d="M240 74 L248 74 L248 324 L240 324 Z" fill="#f0f3f5" opacity="0.15"/>
+
+  <!-- Visible shelves through glass -->
+  <line x1="208" y1="156" x2="392" y2="156" stroke="#c2b8aa" stroke-width="1.2" opacity="0.7"/>
+  <line x1="208" y1="230" x2="392" y2="230" stroke="#c2b8aa" stroke-width="1.2" opacity="0.7"/>
+
+  <!-- Items on shelves (stylized cups/plates) -->
+  <!-- Top shelf items -->
+  <rect x="230" y="130" width="18" height="22" rx="2" fill="#d5cfc5" opacity="0.5"/>
+  <rect x="256" y="134" width="18" height="18" rx="2" fill="#d0cbc3" opacity="0.5"/>
+  <rect x="282" y="128" width="18" height="24" rx="2" fill="#d5cfc5" opacity="0.5"/>
+  <!-- Middle shelf items -->
+  <rect x="240" y="202" width="20" height="24" rx="2" fill="#d0cbc3" opacity="0.5"/>
+  <rect x="268" y="206" width="20" height="20" rx="2" fill="#d5cfc5" opacity="0.5"/>
+  <circle cx="310" cy="218" r="10" fill="#d0cbc3" opacity="0.4"/>
+  <!-- Bottom shelf items -->
+  <rect x="235" y="274" width="40" height="18" rx="3" fill="#d0cbc3" opacity="0.4"/>
+  <rect x="285" y="270" width="22" height="22" rx="2" fill="#d5cfc5" opacity="0.4"/>
+
+  <!-- Door handle -->
+  <rect x="383" y="174" width="5" height="40" rx="2.5" fill="#8a8278"/>
+
+  <!-- Door frame overlay (thin metal frame) -->
+  <rect x="202" y="74" width="196" height="250" rx="2" fill="none" stroke="#b5ad9e" stroke-width="2"/>
+
+  <!-- Dimension: width -->
+  <line x1="190" y1="356" x2="410" y2="356" stroke="#a09688" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <line x1="190" y1="352" x2="190" y2="360" stroke="#a09688" stroke-width="0.8"/>
+  <line x1="410" y1="352" x2="410" y2="360" stroke="#a09688" stroke-width="0.8"/>
+  <text x="300" y="372" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#8a8278">60 cm</text>
+
+  <!-- Dimension: height -->
+  <line x1="440" y1="64" x2="440" y2="334" stroke="#a09688" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <line x1="436" y1="64" x2="444" y2="64" stroke="#a09688" stroke-width="0.8"/>
+  <line x1="436" y1="334" x2="444" y2="334" stroke="#a09688" stroke-width="0.8"/>
+  <text x="456" y="205" text-anchor="start" font-family="system-ui, sans-serif" font-size="10" fill="#8a8278" transform="rotate(90 456 205)">90 cm</text>
+</svg>

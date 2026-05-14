@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 400" fill="none">
+  <rect width="600" height="400" fill="#f5f1ec"/>
+  <line x1="0" y1="360" x2="600" y2="360" stroke="#e0dbd3" stroke-width="1"/>
+
+  <!-- Left wing body -->
+  <path d="M120 100 L120 330 L280 346 L280 114 Z" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.5"/>
+  <!-- Left wing countertop -->
+  <path d="M116 94 L116 100 L284 116 L284 108 Z" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <!-- Left wing door -->
+  <path d="M132 110 L132 326 L268 340 L268 122 Z" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Left handle -->
+  <path d="M256 208 L256 244 L260 244.4 L260 208.4 Z" fill="#8a8278" rx="2"/>
+
+  <!-- Right wing body -->
+  <path d="M280 114 L280 346 L460 330 L460 100 Z" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.5"/>
+  <!-- Right wing countertop -->
+  <path d="M276 108 L276 116 L464 98 L464 90 Z" fill="#c2b8aa" stroke="#a09688" stroke-width="1"/>
+  <!-- Right wing door -->
+  <path d="M292 122 L292 340 L448 326 L448 108 Z" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Right handle -->
+  <path d="M302 210 L302 246 L306 245.7 L306 209.7 Z" fill="#8a8278"/>
+
+  <!-- Corner join line -->
+  <line x1="280" y1="108" x2="280" y2="346" stroke="#b5ad9e" stroke-width="1.5"/>
+
+  <!-- Plinth left -->
+  <path d="M124 330 L280 346 L280 352 L124 336 Z" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="0.8"/>
+  <!-- Plinth right -->
+  <path d="M280 346 L456 330 L456 336 L280 352 Z" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="0.8"/>
+
+  <!-- Carousel hint -->
+  <circle cx="280" cy="240" r="50" fill="none" stroke="#d1cbc2" stroke-width="1" stroke-dasharray="4 3" opacity="0.5"/>
+  <circle cx="280" cy="240" r="30" fill="none" stroke="#d1cbc2" stroke-width="0.7" stroke-dasharray="3 2" opacity="0.4"/>
+  <circle cx="280" cy="240" r="4" fill="#d1cbc2" opacity="0.5"/>
+
+  <!-- Dimension: width -->
+  <line x1="120" y1="380" x2="460" y2="380" stroke="#a09688" stroke-width="0.8" stroke-dasharray="4 3"/>
+  <line x1="120" y1="376" x2="120" y2="384" stroke="#a09688" stroke-width="0.8"/>
+  <line x1="460" y1="376" x2="460" y2="384" stroke="#a09688" stroke-width="0.8"/>
+  <text x="290" y="394" text-anchor="middle" font-family="system-ui, sans-serif" font-size="10" fill="#8a8278">90 &#215; 90 cm</text>
+</svg>

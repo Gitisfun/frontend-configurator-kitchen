@@ -1,6 +1,9 @@
 import { computed, ref } from 'vue';
 import { PICKER_KEY_PLINTH, PICKER_KEY_FRONT, PICKER_KEY_SIDE_PANEL, PICKER_KEY_HANDLE, type ConfiguratorPickerKey } from '../constants/configurator';
-import type { PlinthOption, FrontOption, SideOption, HandleOption } from '../constants/dummy';
+import type { FrontOption } from '../models/front';
+import type { PlinthOption } from '../models/plinth';
+import type { BackOption } from '../models/back';
+import type { HandleOption } from '../models/handle';
 import { useStepperStore } from '../../stores/stepper';
 
 export type PickerKey = ConfiguratorPickerKey;
@@ -18,8 +21,8 @@ export function useConfiguratorState() {
     set: (v) => stepper.setStepTwoSelection('front', v),
   });
   const sidePanelOpen = ref(false);
-  const sideSelection = computed<SideOption | null>({
-    get: () => stepper.stepTwo.side as SideOption | null,
+  const sideSelection = computed<BackOption | null>({
+    get: () => stepper.stepTwo.side as BackOption | null,
     set: (v) => stepper.setStepTwoSelection('side', v),
   });
   const handlePanelOpen = ref(false);

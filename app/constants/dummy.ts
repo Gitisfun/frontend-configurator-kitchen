@@ -220,8 +220,8 @@ export const CONFIGURATOR_PRODUCTS: ConfiguratorProduct[] = [
   {
     id: 'appliance-niche-178',
     title: 'Apparatenkast, met inbouwnis 178cm hoog',
-    image: '/placeholder.png',
-    thumb: '/placeholder.png',
+    image: '/svg/product-appliance-niche.svg',
+    thumb: '/svg/product-appliance-niche-thumb.svg',
     dimensions: {
       width: [
         { value: '60', label: '60 cm breed' },
@@ -259,8 +259,8 @@ export const CONFIGURATOR_PRODUCTS: ConfiguratorProduct[] = [
   {
     id: 'base-2-drawers-80',
     title: 'Onderkast met 2 lades, 80cm breed',
-    image: '/placeholder.png',
-    thumb: '/placeholder.png',
+    image: '/svg/product-base-drawers.svg',
+    thumb: '/svg/product-base-drawers-thumb.svg',
     dimensions: {
       width: [
         { value: '80', label: '80 cm breed' },
@@ -282,8 +282,8 @@ export const CONFIGURATOR_PRODUCTS: ConfiguratorProduct[] = [
   {
     id: 'wall-glass-60',
     title: 'Bovenkast met glazen deur, 60cm breed',
-    image: '/placeholder.png',
-    thumb: '/placeholder.png',
+    image: '/svg/product-wall-glass.svg',
+    thumb: '/svg/product-wall-glass-thumb.svg',
     dimensions: {
       width: [
         { value: '60', label: '60 cm breed' },
@@ -304,8 +304,8 @@ export const CONFIGURATOR_PRODUCTS: ConfiguratorProduct[] = [
   {
     id: 'tall-pantry-60',
     title: 'Hoge voorraadkast, 60cm breed',
-    image: '/placeholder.png',
-    thumb: '/placeholder.png',
+    image: '/svg/product-tall-pantry.svg',
+    thumb: '/svg/product-tall-pantry-thumb.svg',
     dimensions: {
       width: [{ value: '60', label: '60 cm breed' }],
       height: [
@@ -326,8 +326,8 @@ export const CONFIGURATOR_PRODUCTS: ConfiguratorProduct[] = [
   {
     id: 'corner-base-90',
     title: 'Hoekonderkast, 90x90cm',
-    image: '/placeholder.png',
-    thumb: '/placeholder.png',
+    image: '/svg/product-corner-base.svg',
+    thumb: '/svg/product-corner-base-thumb.svg',
     dimensions: {
       width: [{ value: '90', label: '90 cm breed' }],
       height: [{ value: '72', label: '72 cm hoog' }],

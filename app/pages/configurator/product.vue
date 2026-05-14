@@ -1,33 +1,42 @@
 <template>
   <div class="configurator-page configurator-product-page">
     <section class="configurator-main">
-      <div class="configurator-main__inner">
+      <p v-if="!seriesId" class="configurator-product-page__notice">Geen product geselecteerd. Ga terug en kies een serie.</p>
+      <p v-else-if="fetchError" class="configurator-product-page__notice">Kon het product niet laden. Probeer het opnieuw.</p>
+      <template v-else-if="pending">
+        <div class="configurator-product-page__inner configurator-product-page__inner--loading" aria-busy="true">
+          <div class="configurator-product-page__skeleton configurator-product-page__skeleton--title" />
+          <div class="configurator-product-page__skeleton configurator-product-page__skeleton--hero" />
+        </div>
+      </template>
+      <template v-else-if="product">
+        <div class="configurator-main__inner">
         <header class="configurator-product-page__header">
           <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-product-page__title">
-            {{ product?.title ?? 'Product' }}
+            {{ product.title }}
           </BaseHeader>
         </header>
 
         <div class="configurator-product-page__media">
-          <img :src="product?.image ?? '/placeholder.png'" alt="Product" class="configurator-product-page__image" width="600" height="400" />
-          <img :src="product?.thumb ?? product?.image ?? '/placeholder.png'" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
+          <img :src="product.image" alt="Product" class="configurator-product-page__image" width="600" height="400" />
+          <img :src="product.thumb ?? product.image" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
         </div>
 
         <div class="configurator-product-page__column configurator-product-page__column--formaat">
           <div class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Selecteer formaat </BaseHeader>
             <div class="configurator-product-page__selects">
-              <BaseSelect v-model="form.width" :options="product?.dimensions.width ?? []" label="Breedte" />
-              <BaseSelect v-model="form.height" :options="product?.dimensions.height ?? []" label="Hoogte" />
-              <BaseSelect v-model="form.depth" :options="product?.dimensions.depth ?? []" label="Diepte" />
-              <BaseSelect v-if="(product?.dimensions.plinth?.length ?? 0) > 0" v-model="form.plinth" :options="product?.dimensions.plinth ?? []" label="Plint" />
+              <BaseSelect v-model="form.width" :options="product.dimensions.width" label="Breedte" />
+              <BaseSelect v-model="form.height" :options="product.dimensions.height" label="Hoogte" />
+              <BaseSelect v-model="form.depth" :options="product.dimensions.depth" label="Diepte" />
+              <BaseSelect v-if="product.dimensions.plinth.length > 0" v-model="form.plinth" :options="product.dimensions.plinth" label="Plint" />
             </div>
-            <fieldset v-if="product?.doorSwing.leftLabel || product?.doorSwing.rightLabel" class="configurator-product-page__radios" aria-label="Deurrichting">
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" :label="product?.doorSwing.leftLabel ?? 'Deur links'" />
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" :label="product?.doorSwing.rightLabel ?? 'Deur rechts'" />
+            <fieldset v-if="product.doorSwing.leftLabel || product.doorSwing.rightLabel" class="configurator-product-page__radios" aria-label="Deurrichting">
+              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" :label="product.doorSwing.leftLabel ?? 'Deur links'" />
+              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" :label="product.doorSwing.rightLabel ?? 'Deur rechts'" />
             </fieldset>
           </div>
-          <div v-if="product?.addOns?.length" class="configurator-product-page__section">
+          <div v-if="product.addOns.length" class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Maak je aankoop compleet </BaseHeader>
             <div class="configurator-product-page__checkboxes">
               <BaseCheckbox v-for="addon in product.addOns" :key="addon.id" v-model="form.addOns" :value="addon.id">
@@ -49,7 +58,7 @@
           <div class="configurator-product-page__section">
             <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Productinformatie </BaseHeader>
             <ul class="configurator-product-page__bullets">
-              <li v-for="(info, i) in product?.productInformation" :key="i">
+              <li v-for="(info, i) in product.productInformation" :key="i">
                 <BaseParagraph size="small" align="left" color="primary">{{ info }}</BaseParagraph>
               </li>
             </ul>
@@ -63,24 +72,46 @@
           </div>
         </div>
       </div>
+      </template>
 
-      <div class="configurator-main__actions">
-        <BaseButtons back-label="terug" next-label="voeg toe aan winkelwagen" @back="onBack" @next="addToCart" />
+      <div v-if="!pending || fetchError || !seriesId" class="configurator-main__actions">
+        <BaseButtons
+          back-label="terug"
+          next-label="voeg toe aan winkelwagen"
+          :show-next="!!product && !fetchError"
+          @back="onBack"
+          @next="addToCart"
+        />
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import { ref, computed, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import { useCartStore } from '../../../stores/cart';
-import { CONFIGURATOR_PRODUCTS, type ConfiguratorProduct } from '../../constants/dummy';
+import type { ConfiguratorProduct } from '../../constants/dummy';
+import { CONFIGURATOR_PRODUCT_PATH } from '../../services/configuratorProduct';
 
+const route = useRoute();
 const router = useRouter();
 const cartStore = useCartStore();
 
-const product = ref<ConfiguratorProduct | null>(null);
+const seriesId = computed(() => {
+  const q = route.query.series;
+  return typeof q === 'string' ? q.trim() : '';
+});
+
+const { data: product, pending, error: fetchError } = await useAsyncData(
+  () => `configurator-product-${seriesId.value || 'none'}`,
+  () => {
+    const id = seriesId.value;
+    if (!id) return Promise.resolve(null);
+    return $fetch<ConfiguratorProduct>(CONFIGURATOR_PRODUCT_PATH, { query: { series: id } });
+  },
+  { watch: [seriesId] },
+);
 
 const form = ref({
   width: '',
@@ -93,13 +124,6 @@ const form = ref({
 });
 
 const quantity = ref(1);
-
-function pickRandomProduct() {
-  if (CONFIGURATOR_PRODUCTS.length === 0) return;
-  const index = Math.floor(Math.random() * CONFIGURATOR_PRODUCTS.length);
-  const p = CONFIGURATOR_PRODUCTS[index];
-  if (p) product.value = p;
-}
 
 function initFormFromProduct() {
   const p = product.value;
@@ -115,12 +139,7 @@ function initFormFromProduct() {
   };
 }
 
-onMounted(() => {
-  pickRandomProduct();
-  initFormFromProduct();
-});
-
-watch(product, () => initFormFromProduct(), { immediate: false });
+watch(product, () => initFormFromProduct(), { immediate: true });
 
 const totalPrice = computed(() => {
   const p = product.value;
@@ -134,6 +153,23 @@ const totalPrice = computed(() => {
 });
 
 function onBack() {
+  const q = route.query;
+  const type = typeof q.type === 'string' ? q.type : '';
+  const category = typeof q.category === 'string' ? q.category : '';
+  const subcategoryPath = typeof q.subcategoryPath === 'string' ? q.subcategoryPath.trim() : '';
+
+  if (category) {
+    router.push({
+      path: '/configurator/subcategories',
+      query: {
+        ...(type ? { type } : {}),
+        category,
+        ...(subcategoryPath ? { subcategoryPath } : {}),
+      },
+    });
+    return;
+  }
+
   router.back();
 }
 
@@ -144,7 +180,7 @@ function addToCart() {
   cartStore.addItem({
     productId: p.id,
     title: p.title,
-    image: p.thumb ?? p.image ?? '/placeholder.png',
+    image: p.thumb ?? p.image,
     form: {
       width: form.value.width,
       height: form.value.height,
@@ -170,6 +206,48 @@ function addToCart() {
   padding-bottom: var(--intro-padding-y);
   padding-left: var(--intro-padding-x);
   padding-right: var(--intro-padding-x);
+}
+
+.configurator-product-page__notice {
+  margin: 0 auto;
+  max-width: var(--intro-max-width);
+  font-family: var(--font-sans);
+  font-size: var(--paragraph-size-medium);
+  color: var(--color-text-muted);
+}
+
+.configurator-product-page__inner--loading {
+  max-width: var(--intro-max-width);
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.configurator-product-page__skeleton {
+  border-radius: var(--picker-radius);
+  background: linear-gradient(90deg, var(--color-surface-hover) 25%, var(--picker-border) 50%, var(--color-surface-hover) 75%);
+  background-size: 200% 100%;
+  animation: product-shimmer 1.4s ease infinite;
+}
+
+.configurator-product-page__skeleton--title {
+  height: 2.5rem;
+  max-width: 70%;
+}
+
+.configurator-product-page__skeleton--hero {
+  aspect-ratio: 4 / 3;
+  max-width: 480px;
+}
+
+@keyframes product-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 
 .configurator-main {
@@ -221,16 +299,17 @@ function addToCart() {
   height: auto;
   display: block;
   border-radius: var(--picker-radius);
-  background-color: #f5f2ee;
+  background-color: #f5f1ec;
+  object-fit: contain;
 }
 
 .configurator-product-page__thumb {
   width: 80px;
   height: 80px;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: var(--picker-radius);
   border: 1px solid var(--picker-border);
-  background-color: #f5f2ee;
+  background-color: #f5f1ec;
 }
 
 .configurator-product-page__column {

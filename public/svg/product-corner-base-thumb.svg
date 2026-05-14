@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <rect width="200" height="200" fill="#f5f1ec"/>
+
+  <!-- Left wing body -->
+  <path d="M30 48 L30 162 L100 170 L100 54 Z" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Left wing countertop -->
+  <path d="M28 44 L28 48 L104 56 L104 50 Z" fill="#c2b8aa" stroke="#a09688" stroke-width="0.8"/>
+  <!-- Left wing door -->
+  <path d="M36 54 L36 158 L94 164 L94 60 Z" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1"/>
+  <!-- Left handle -->
+  <path d="M88 100 L88 118 L90 118.2 L90 100.2 Z" fill="#8a8278"/>
+
+  <!-- Right wing body -->
+  <path d="M100 54 L100 170 L170 162 L170 48 Z" fill="#ebe6de" stroke="#b5ad9e" stroke-width="1.2"/>
+  <!-- Right wing countertop -->
+  <path d="M96 50 L96 56 L174 46 L174 40 Z" fill="#c2b8aa" stroke="#a09688" stroke-width="0.8"/>
+  <!-- Right wing door -->
+  <path d="M106 60 L106 164 L164 158 L164 54 Z" fill="#e3ddd3" stroke="#b5ad9e" stroke-width="1"/>
+  <!-- Right handle -->
+  <path d="M110 100 L110 118 L112 117.8 L112 99.8 Z" fill="#8a8278"/>
+
+  <!-- Corner join -->
+  <line x1="100" y1="50" x2="100" y2="170" stroke="#b5ad9e" stroke-width="1.2"/>
+
+  <!-- Carousel hint -->
+  <circle cx="100" cy="118" r="24" fill="none" stroke="#d1cbc2" stroke-width="0.7" stroke-dasharray="3 2" opacity="0.5"/>
+  <circle cx="100" cy="118" r="3" fill="#d1cbc2" opacity="0.5"/>
+
+  <!-- Plinth -->
+  <path d="M32 162 L100 170 L100 174 L32 166 Z" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="0.6"/>
+  <path d="M100 170 L168 162 L168 166 L100 174 Z" fill="#d5cfc5" stroke="#b5ad9e" stroke-width="0.6"/>
+</svg>
