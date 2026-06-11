@@ -70,11 +70,7 @@ function mergeUniqueSeries(parts: StrapiCabinetSerie[][]): CategoryCatalogItem[]
   return merged.map((row) => mapSeries(row));
 }
 
-async function fetchStrapiProducts(
-  strapiUrl: string,
-  strapiToken: string,
-  query: Record<string, string | number | boolean>,
-): Promise<StrapiProduct[]> {
+async function fetchStrapiProducts(strapiUrl: string, strapiToken: string, query: Record<string, string | number | boolean>): Promise<StrapiProduct[]> {
   try {
     const res = await $fetch<StrapiProductsResponse>(`${strapiUrl}/api/products`, {
       headers: { Authorization: `Bearer ${strapiToken}` },
@@ -89,8 +85,7 @@ async function fetchStrapiProducts(
 export default defineEventHandler(async (event): Promise<CategoryCatalogResponse> => {
   const query = getQuery(event);
   const categoryId = typeof query.category === 'string' ? query.category.trim() : '';
-  const parentSubcategoryId =
-    typeof query.parentSubcategory === 'string' ? query.parentSubcategory.trim() : '';
+  const parentSubcategoryId = typeof query.parentSubcategory === 'string' ? query.parentSubcategory.trim() : '';
 
   if (!categoryId) {
     throw createError({

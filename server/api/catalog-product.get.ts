@@ -13,7 +13,10 @@ interface StrapiProductResponse {
 
 function stripHtmlToPlain(html: string | null | undefined): string | null {
   if (html == null || typeof html !== 'string') return null;
-  const text = html.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+  const text = html
+    .replace(/<[^>]*>/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
   return text.length ? text : null;
 }
 
@@ -31,15 +34,12 @@ export default defineEventHandler(async (event): Promise<CatalogProductDetail> =
   const config = useRuntimeConfig(event);
 
   try {
-    const res = await $fetch<StrapiProductResponse>(
-      `${config.strapiUrl}/api/products/${encodeURIComponent(documentId)}`,
-      {
-        headers: { Authorization: `Bearer ${config.strapiToken}` },
-        query: {
-          'populate[image]': 'true',
-        },
+    const res = await $fetch<StrapiProductResponse>(`${config.strapiUrl}/api/products/${encodeURIComponent(documentId)}`, {
+      headers: { Authorization: `Bearer ${config.strapiToken}` },
+      query: {
+        'populate[image]': 'true',
       },
-    );
+    });
 
     const row = res.data;
     if (!row?.documentId) {
@@ -53,8 +53,7 @@ export default defineEventHandler(async (event): Promise<CatalogProductDetail> =
       descriptionText: stripHtmlToPlain(row.description ?? null),
     };
   } catch (err: unknown) {
-    const status =
-      err && typeof err === 'object' && 'statusCode' in err ? Number((err as { statusCode: number }).statusCode) : 502;
+    const status = err && typeof err === 'object' && 'statusCode' in err ? Number((err as { statusCode: number }).statusCode) : 502;
     if (status === 404) {
       throw createError({ statusCode: 404, statusMessage: 'Product not found.' });
     }
