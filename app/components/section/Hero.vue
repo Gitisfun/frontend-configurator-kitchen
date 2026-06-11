@@ -1,3 +1,12 @@
+<script setup lang="ts">
+function scrollToConfiguratorIntro() {
+  document.getElementById('configurator-intro')?.scrollIntoView({
+    behavior: 'smooth',
+    block: 'start',
+  });
+}
+</script>
+
 <template>
   <div class="hero-section">
     <div class="hero-image">
@@ -8,7 +17,7 @@
       <BaseHeader size="big" as="h1" align="center" color="light"> Customize Your Cabinet </BaseHeader>
       <BaseParagraph size="large" align="center" color="light" max-width="800px"> Select colors and handle styles to create your perfect kitchen piece. </BaseParagraph>
       <div class="button-container">
-        <BaseButton variant="primary" size="medium" rounded> Continue </BaseButton>
+        <BaseButton variant="primary" size="medium" rounded @click="scrollToConfiguratorIntro"> Continue </BaseButton>
       </div>
     </div>
   </div>

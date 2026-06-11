@@ -1,117 +1,130 @@
 <template>
-  <div class="configurator-page configurator-product-page">
-    <section class="configurator-main">
-      <p v-if="!seriesId" class="configurator-product-page__notice">Geen product geselecteerd. Ga terug en kies een serie.</p>
+  <BaseConfiguratorTemplate class="configurator-product-page" :title="product?.title ?? ''" :show-actions="pending || !!fetchError || (!productId && !seriesId) || !!product">
+    <template #before>
+      <NuxtLink :to="subcategoriesRoute" class="configurator-product-page__back-link"> terug naar kasten </NuxtLink>
+    </template>
+
+    <template #default>
+      <p v-if="!productId && !seriesId" class="configurator-product-page__notice">Geen product geselecteerd. Ga terug en kies een product of serie.</p>
       <p v-else-if="fetchError" class="configurator-product-page__notice">Kon het product niet laden. Probeer het opnieuw.</p>
       <template v-else-if="pending">
-        <div class="configurator-product-page__inner configurator-product-page__inner--loading" aria-busy="true">
-          <div class="configurator-product-page__skeleton configurator-product-page__skeleton--title" />
-          <div class="configurator-product-page__skeleton configurator-product-page__skeleton--hero" />
+        <div class="configurator-main__inner configurator-product-page__skeleton-layout" aria-busy="true" aria-label="Product laden">
+          <header class="configurator-product-page__header">
+            <div class="product-skeleton product-skeleton--title product-skeleton__shimmer" />
+          </header>
+
+          <div class="configurator-product-page__media">
+            <div class="product-skeleton product-skeleton--image product-skeleton__shimmer" />
+            <div class="product-skeleton product-skeleton--thumb product-skeleton__shimmer" />
+          </div>
+
+          <div class="configurator-product-page__column configurator-product-page__column--formaat">
+            <div class="product-skeleton product-skeleton--section-title product-skeleton__shimmer" />
+            <div v-for="n in 4" :key="`select-${n}`" class="product-skeleton product-skeleton--select product-skeleton__shimmer" />
+            <div class="product-skeleton-radios">
+              <div class="product-skeleton product-skeleton--radio product-skeleton__shimmer" />
+              <div class="product-skeleton product-skeleton--radio product-skeleton__shimmer" />
+            </div>
+            <div class="product-skeleton-qty-price">
+              <div class="product-skeleton product-skeleton--qty product-skeleton__shimmer" />
+              <div class="product-skeleton product-skeleton--price product-skeleton__shimmer" />
+            </div>
+          </div>
+
+          <div class="configurator-product-page__column configurator-product-page__column--details">
+            <div class="product-skeleton product-skeleton--section-title product-skeleton__shimmer" />
+            <div class="product-skeleton-lines">
+              <div v-for="(width, i) in detailLineWidths" :key="`line-${i}`" class="product-skeleton product-skeleton--line product-skeleton__shimmer" :style="{ width }" />
+            </div>
+          </div>
         </div>
       </template>
       <template v-else-if="product">
         <div class="configurator-main__inner">
-        <header class="configurator-product-page__header">
-          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-product-page__title">
-            {{ product.title }}
-          </BaseHeader>
-        </header>
-
-        <div class="configurator-product-page__media">
-          <img :src="product.image" alt="Product" class="configurator-product-page__image" width="600" height="400" />
-          <img :src="product.thumb ?? product.image" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
-        </div>
-
-        <div class="configurator-product-page__column configurator-product-page__column--formaat">
-          <div class="configurator-product-page__section">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Selecteer formaat </BaseHeader>
-            <div class="configurator-product-page__selects">
-              <BaseSelect v-model="form.width" :options="product.dimensions.width" label="Breedte" />
-              <BaseSelect v-model="form.height" :options="product.dimensions.height" label="Hoogte" />
-              <BaseSelect v-model="form.depth" :options="product.dimensions.depth" label="Diepte" />
-              <BaseSelect v-if="product.dimensions.plinth.length > 0" v-model="form.plinth" :options="product.dimensions.plinth" label="Plint" />
-            </div>
-            <fieldset v-if="product.doorSwing.leftLabel || product.doorSwing.rightLabel" class="configurator-product-page__radios" aria-label="Deurrichting">
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" :label="product.doorSwing.leftLabel ?? 'Deur links'" />
-              <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" :label="product.doorSwing.rightLabel ?? 'Deur rechts'" />
-            </fieldset>
+          <div class="configurator-product-page__media">
+            <img :src="product.image" alt="Product" class="configurator-product-page__image" width="600" height="400" />
+            <img :src="product.thumb ?? product.image" alt="Product variant" class="configurator-product-page__thumb" width="120" height="120" />
           </div>
-          <div v-if="product.addOns.length" class="configurator-product-page__section">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Maak je aankoop compleet </BaseHeader>
-            <div class="configurator-product-page__checkboxes">
-              <BaseCheckbox v-for="addon in product.addOns" :key="addon.id" v-model="form.addOns" :value="addon.id">
-                {{ addon.name }} + {{ addon.price }},-
-                <span class="configurator-product-page__info-icon" aria-hidden="true">i</span>
-              </BaseCheckbox>
+
+          <div class="configurator-product-page__column configurator-product-page__column--formaat">
+            <div class="configurator-product-page__section">
+              <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Selecteer formaat </BaseHeader>
+              <div class="configurator-product-page__selects">
+                <BaseSelect v-model="form.width" :options="product.dimensions.width" label="Breedte" />
+                <BaseSelect v-model="form.height" :options="product.dimensions.height" label="Hoogte" />
+                <BaseSelect v-model="form.depth" :options="product.dimensions.depth" label="Diepte" />
+                <BaseSelect v-if="product.dimensions.plinth.length > 0" v-model="form.plinth" :options="product.dimensions.plinth" label="Plint" />
+              </div>
+              <fieldset v-if="product.doorSwing.leftLabel || product.doorSwing.rightLabel" class="configurator-product-page__radios" aria-label="Deurrichting">
+                <BaseRadioButton v-model="form.doorSide" name="doorSide" value="left" :label="product.doorSwing.leftLabel ?? 'Deur links'" />
+                <BaseRadioButton v-model="form.doorSide" name="doorSide" value="right" :label="product.doorSwing.rightLabel ?? 'Deur rechts'" />
+              </fieldset>
             </div>
-          </div>
-          <div class="configurator-product-page__quantity-price">
-            <BaseNumberfield v-model="quantity" label="Selecteer aantal" :min="1" :max="99" aria-label="Aantal" />
-            <div class="configurator-product-page__price">
-              <span class="configurator-product-page__price-amount">{{ totalPrice }},-</span>
-              <BaseParagraph size="small" align="left" color="primary" class="configurator-product-page__price-unit"> per stuk </BaseParagraph>
+            <div v-if="product.addOns.length" class="configurator-product-page__section">
+              <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Maak je aankoop compleet </BaseHeader>
+              <div class="configurator-product-page__checkboxes">
+                <BaseCheckbox v-for="addon in product.addOns" :key="addon.id" v-model="form.addOns" :value="addon.id">
+                  {{ addon.name }} + {{ addon.price }},-
+                  <span class="configurator-product-page__info-icon" aria-hidden="true">i</span>
+                </BaseCheckbox>
+              </div>
+            </div>
+            <div class="configurator-product-page__quantity-price">
+              <BaseNumberfield v-model="quantity" label="Selecteer aantal" :min="1" :max="99" aria-label="Aantal" />
+              <div class="configurator-product-page__price">
+                <span class="configurator-product-page__price-amount">{{ totalPrice }},-</span>
+                <BaseParagraph size="small" align="left" color="primary" class="configurator-product-page__price-unit"> per stuk </BaseParagraph>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="configurator-product-page__column configurator-product-page__column--details">
-          <div class="configurator-product-page__section">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Productinformatie </BaseHeader>
-            <ul class="configurator-product-page__bullets">
-              <li v-for="(info, i) in product.productInformation" :key="i">
-                <BaseParagraph size="small" align="left" color="primary">{{ info }}</BaseParagraph>
-              </li>
-            </ul>
-          </div>
-          <div class="configurator-product-page__section">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title">
-              Voeg apparatuur toe
-              <span class="configurator-product-page__info-icon" aria-hidden="true">i</span>
-            </BaseHeader>
-            <BaseTextfield v-model="form.equipment" placeholder="Merk en type nummer" aria-label="Merk en type nummer" max-width="320px" />
+          <div class="configurator-product-page__column configurator-product-page__column--details">
+            <div v-if="product.productInformation.length > 0" class="configurator-product-page__section">
+              <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-product-page__section-title"> Productinformatie </BaseHeader>
+              <ul class="configurator-product-page__bullets">
+                <li v-for="(info, i) in product.productInformation" :key="i">
+                  <BaseParagraph size="small" align="left" color="primary">{{ info }}</BaseParagraph>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
-      </div>
       </template>
+    </template>
 
-      <div v-if="!pending || fetchError || !seriesId" class="configurator-main__actions">
-        <BaseButtons
-          back-label="terug"
-          next-label="voeg toe aan winkelwagen"
-          :show-next="!!product && !fetchError"
-          @back="onBack"
-          @next="addToCart"
-        />
+    <template #actions>
+      <div v-if="pending" class="configurator-main__actions--skeleton" aria-hidden="true">
+        <div class="product-skeleton product-skeleton--btn-back product-skeleton__shimmer" />
+        <div class="product-skeleton product-skeleton--btn-next product-skeleton__shimmer" />
       </div>
-    </section>
-  </div>
+      <BaseButtons v-else-if="fetchError || (!productId && !seriesId) || product" back-label="terug" next-label="voeg toe aan winkelwagen" :show-next="!!product && !fetchError" @back="onBack" @next="addToCart" />
+    </template>
+  </BaseConfiguratorTemplate>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import { useConfiguratorCategoryStep } from '../../composables/useConfiguratorCategoryStep';
+import { useConfiguratorProduct } from '../../composables/api/useConfiguratorProduct';
 import { useCartStore } from '../../../stores/cart';
-import type { ConfiguratorProduct } from '../../constants/dummy';
-import { CONFIGURATOR_PRODUCT_PATH } from '../../services/configuratorProduct';
+import { trimmedRouteQueryParam } from '../../utils/routeQuery';
+import { useStepperStore } from '../../../stores/stepper';
 
 const route = useRoute();
 const router = useRouter();
 const cartStore = useCartStore();
+const stepperStore = useStepperStore();
 
-const seriesId = computed(() => {
-  const q = route.query.series;
-  return typeof q === 'string' ? q.trim() : '';
-});
+console.log('stepperStore', stepperStore.stepOne);
+console.log('stepperStore', stepperStore.stepTwo);
 
-const { data: product, pending, error: fetchError } = await useAsyncData(
-  () => `configurator-product-${seriesId.value || 'none'}`,
-  () => {
-    const id = seriesId.value;
-    if (!id) return Promise.resolve(null);
-    return $fetch<ConfiguratorProduct>(CONFIGURATOR_PRODUCT_PATH, { query: { series: id } });
-  },
-  { watch: [seriesId] },
-);
+const { subcategoriesRoute } = useConfiguratorCategoryStep();
+
+const productId = computed(() => trimmedRouteQueryParam(route.query.product));
+const seriesId = computed(() => trimmedRouteQueryParam(route.query.series));
+
+const { product, pending, error: fetchError } = await useConfiguratorProduct(productId, seriesId);
 
 const form = ref({
   width: '',
@@ -124,6 +137,9 @@ const form = ref({
 });
 
 const quantity = ref(1);
+
+/** Varied widths for product-info skeleton lines. */
+const detailLineWidths = ['100%', '88%', '72%', '94%', '65%', '80%'];
 
 function initFormFromProduct() {
   const p = product.value;
@@ -153,24 +169,7 @@ const totalPrice = computed(() => {
 });
 
 function onBack() {
-  const q = route.query;
-  const type = typeof q.type === 'string' ? q.type : '';
-  const category = typeof q.category === 'string' ? q.category : '';
-  const subcategoryPath = typeof q.subcategoryPath === 'string' ? q.subcategoryPath.trim() : '';
-
-  if (category) {
-    router.push({
-      path: '/configurator/subcategories',
-      query: {
-        ...(type ? { type } : {}),
-        category,
-        ...(subcategoryPath ? { subcategoryPath } : {}),
-      },
-    });
-    return;
-  }
-
-  router.back();
+  router.push(subcategoriesRoute.value);
 }
 
 function addToCart() {
@@ -199,13 +198,18 @@ function addToCart() {
 </script>
 
 <style scoped>
-.configurator-product-page {
-  position: relative;
-  background-color: var(--color-surface);
-  padding-top: calc(var(--navbar-height) + 1.5rem);
-  padding-bottom: var(--intro-padding-y);
-  padding-left: var(--intro-padding-x);
-  padding-right: var(--intro-padding-x);
+.configurator-product-page__back-link {
+  position: absolute;
+  top: 0;
+  right: var(--intro-padding-x);
+  font-family: var(--font-sans);
+  font-size: var(--paragraph-size-small);
+  color: var(--color-text-primary);
+  text-decoration: underline;
+}
+
+.configurator-product-page__back-link:hover {
+  color: var(--color-brand);
 }
 
 .configurator-product-page__notice {
@@ -216,42 +220,169 @@ function addToCart() {
   color: var(--color-text-muted);
 }
 
-.configurator-product-page__inner--loading {
-  max-width: var(--intro-max-width);
-  margin: 0 auto;
+.product-skeleton {
+  border-radius: var(--picker-radius);
+  background-color: var(--color-surface-hover);
+}
+
+.product-skeleton__shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.product-skeleton__shimmer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 0%, transparent 40%, rgba(255, 255, 255, 0.55) 50%, transparent 60%, transparent 100%);
+  transform: translateX(-100%);
+  animation: product-skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.product-skeleton--title {
+  height: 2.25rem;
+  width: min(420px, 70%);
+  border-radius: 6px;
+}
+
+.product-skeleton--image {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 4 / 3;
+  border: 1px solid #e8e3da;
+  background-color: #f5f1ec;
+  border-radius: var(--picker-radius);
+}
+
+.product-skeleton--thumb {
+  width: 80px;
+  height: 80px;
+  border: 1px solid #e8e3da;
+  background-color: #f5f1ec;
+  border-radius: var(--picker-radius);
+}
+
+.product-skeleton--section-title {
+  height: 1.125rem;
+  width: 55%;
+  max-width: 200px;
+  margin-bottom: 0.25rem;
+}
+
+.product-skeleton--select {
+  height: 52px;
+  width: 100%;
+  border: 1px solid var(--picker-border);
+  background-color: var(--color-surface);
+}
+
+.product-skeleton-radios {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 0.25rem;
+}
+
+.product-skeleton--radio {
+  height: 1.25rem;
+  width: 7.5rem;
+  border-radius: 999px;
+}
+
+.product-skeleton-qty-price {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.product-skeleton--qty {
+  height: 72px;
+  width: 5.5rem;
+}
+
+.product-skeleton--price {
+  height: 1.75rem;
+  width: 6.5rem;
+}
+
+.product-skeleton-lines {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 0.625rem;
+  margin-top: 0.5rem;
+  padding-left: 0.25rem;
 }
 
-.configurator-product-page__skeleton {
-  border-radius: var(--picker-radius);
-  background: linear-gradient(90deg, var(--color-surface-hover) 25%, var(--picker-border) 50%, var(--color-surface-hover) 75%);
-  background-size: 200% 100%;
-  animation: product-shimmer 1.4s ease infinite;
+.product-skeleton--line {
+  height: 0.8125rem;
+  border-radius: 4px;
 }
 
-.configurator-product-page__skeleton--title {
-  height: 2.5rem;
-  max-width: 70%;
+.configurator-product-page__skeleton-layout .configurator-product-page__column--formaat {
+  gap: 0.75rem;
 }
 
-.configurator-product-page__skeleton--hero {
-  aspect-ratio: 4 / 3;
-  max-width: 480px;
+.configurator-product-page__skeleton-layout .configurator-product-page__column--details {
+  gap: 0.5rem;
 }
 
-@keyframes product-shimmer {
-  0% {
-    background-position: 200% 0;
-  }
+.configurator-main__actions--skeleton {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.product-skeleton--btn-back {
+  height: 44px;
+  width: 7.5rem;
+  border: 1px solid var(--picker-border);
+  background-color: var(--color-surface);
+}
+
+.product-skeleton--btn-next {
+  height: 44px;
+  width: min(280px, 55%);
+  background-color: color-mix(in srgb, var(--color-brand) 35%, var(--color-surface-hover));
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--image::after {
+  animation-delay: 0.05s;
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--thumb::after {
+  animation-delay: 0.1s;
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--select:nth-child(2)::after {
+  animation-delay: 0.08s;
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--select:nth-child(3)::after {
+  animation-delay: 0.12s;
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--select:nth-child(4)::after {
+  animation-delay: 0.16s;
+}
+
+.configurator-product-page__skeleton-layout .product-skeleton--select:nth-child(5)::after {
+  animation-delay: 0.2s;
+}
+
+@keyframes product-skeleton-shimmer {
   100% {
-    background-position: -200% 0;
+    transform: translateX(100%);
   }
 }
 
-.configurator-main {
-  padding: 0;
+@media (prefers-reduced-motion: reduce) {
+  .product-skeleton__shimmer::after {
+    animation: none;
+    opacity: 0.35;
+  }
 }
 
 .configurator-main__inner {
@@ -269,21 +400,6 @@ function addToCart() {
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-}
-
-.configurator-product-page__title {
-  margin-bottom: 0;
-}
-
-.configurator-product-page__back-link {
-  font-family: var(--font-sans);
-  font-size: var(--paragraph-size-small);
-  color: var(--color-text-primary);
-  text-decoration: underline;
-}
-
-.configurator-product-page__back-link:hover {
-  color: var(--color-brand);
 }
 
 .configurator-product-page__media {
@@ -376,22 +492,6 @@ function addToCart() {
   gap: 0.75rem;
 }
 
-.configurator-main__actions {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--picker-border);
-  max-width: var(--intro-max-width);
-  margin-left: auto;
-  margin-right: auto;
-  padding-left: var(--intro-padding-x);
-  padding-right: var(--intro-padding-x);
-}
-
 .configurator-product-page__quantity-price {
   display: flex;
   flex-wrap: wrap;
@@ -422,11 +522,8 @@ function addToCart() {
 }
 
 @media (min-width: 768px) {
-  .configurator-product-page {
-    padding-top: calc(var(--navbar-height-desktop) + 2rem);
-    padding-bottom: var(--intro-padding-y-desktop);
-    padding-left: var(--intro-padding-x-desktop);
-    padding-right: var(--intro-padding-x-desktop);
+  .configurator-product-page__back-link {
+    right: var(--intro-padding-x-desktop);
   }
 
   .configurator-main__inner {
@@ -441,13 +538,6 @@ function addToCart() {
 
   .configurator-product-page__image {
     max-width: 100%;
-  }
-
-  .configurator-main__actions {
-    margin-top: 2.5rem;
-    padding-top: 2.5rem;
-    padding-left: var(--intro-padding-x-desktop);
-    padding-right: var(--intro-padding-x-desktop);
   }
 }
 </style>

@@ -1,6 +1,8 @@
-import { HANDLES_PATH, defaultHandlesResponse, type HandleOption } from '../services/handles';
+import { computed } from 'vue';
+import type { HandleOption } from '../../api/handles';
+import { HANDLES_PATH, defaultHandlesResponse } from '../../api/handles';
 
-export type { HandleOption };
+export type { HandleOption } from '../../api/handles';
 
 export function useHandles() {
   const { data, pending, error, refresh } = useFetch<HandleOption[]>(HANDLES_PATH, {

@@ -1,7 +1,7 @@
 /**
  * Shapes returned by `/api/category-catalog` for the subcategories step.
  */
-export type CategoryCatalogKind = 'subcategory' | 'cabinet-series';
+export type CategoryCatalogKind = 'subcategory' | 'product' | 'cabinet-series';
 
 export interface CategoryCatalogItem {
   id: string;
@@ -12,5 +12,6 @@ export interface CategoryCatalogItem {
 
 export interface CategoryCatalogResponse {
   subcategories: CategoryCatalogItem[];
+  products: CategoryCatalogItem[];
   series: CategoryCatalogItem[];
 }

@@ -1,38 +1,35 @@
 <template>
-  <div class="configurator-page">
-    <header class="configurator-header">
-      <BaseHeader size="big" as="h1" align="center" color="primary" class="configurator-header__title"> Customize Your Cabinet </BaseHeader>
-      <BaseParagraph size="medium" align="center" color="primary" class="configurator-header__description"> Select colors and handle styles to create your perfect kitchen piece. </BaseParagraph>
-    </header>
-
-    <section class="configurator-main">
-      <div class="configurator-main__inner">
-        <div class="configurator-main__media">
-          <div class="configurator-main__canvas-wrap">
-            <div ref="canvasContainerRef" class="configurator-main__canvas-host" :class="{ 'configurator-main__canvas-host--ready': modelLoaded }" aria-hidden="true" />
-            <img v-if="modelLoaded && handleSelection?.image" :key="handleSelection.id" :src="handleSelection.image" :alt="handleSelection.title ?? ''" class="configurator-main__handle-overlay" aria-hidden="true" />
-            <div v-if="!modelLoaded" class="configurator-main__canvas-loading" role="status" aria-live="polite">
-              <span class="configurator-main__spinner" />
-            </div>
+  <BaseConfiguratorTemplate :title="t('configurator.index.title')" :description="t('configurator.index.description')" title-align="center" :back-label="t('configurator.index.actions.back')" :next-label="t('configurator.index.actions.next')" @back="onBack" @next="onNext">
+    <div class="configurator-main__inner">
+      <div class="configurator-main__media">
+        <div class="configurator-main__canvas-wrap">
+          <div ref="canvasContainerRef" class="configurator-main__canvas-host" :class="{ 'configurator-main__canvas-host--ready': modelLoaded }" aria-hidden="true" />
+          <img v-if="modelLoaded && handleSelection?.image" :key="handleSelection.id" :src="handleSelection.image" :alt="handleSelection.title ?? ''" class="configurator-main__handle-overlay" aria-hidden="true" />
+          <div v-if="!modelLoaded" class="configurator-main__canvas-loading" role="status" aria-live="polite">
+            <span class="configurator-main__spinner" />
           </div>
         </div>
-        <div class="configurator-main__pickers">
-          <BasePicker :label="PICKER_LABEL_FRONT" type="color" :value="frontSelection?.image ?? null" :error="showPickerErrors && !frontSelection" error-message="Please select a front color" @click="onPickerClick(PICKER_KEY_FRONT)" />
-          <BasePicker :label="PICKER_LABEL_SIDE_PANEL" type="color" :value="sideSelection?.image ?? null" :error="showPickerErrors && !sideSelection" error-message="Please select a side panel" @click="onPickerClick(PICKER_KEY_SIDE_PANEL)" />
-          <BasePicker :label="PICKER_LABEL_PLINTH" type="color" :value="plinthSelection?.image ?? null" :error="showPickerErrors && !plinthSelection" error-message="Please select a plinth color" @click="onPickerClick(PICKER_KEY_PLINTH)" />
-          <BasePicker :label="PICKER_LABEL_HANDLE" type="image" :value="handleSelection?.image ? { src: handleSelection.image, alt: handleSelection.title } : null" :error="showPickerErrors && !handleSelection" error-message="Please select a handle type" @click="onPickerClick(PICKER_KEY_HANDLE)" />
-        </div>
-        <div class="configurator-main__actions">
-          <BaseButtons back-label="Back" next-label="Next" @back="onBack" @next="onNext" />
-        </div>
       </div>
-    </section>
+      <div class="configurator-main__pickers">
+        <BasePicker :label="t('configurator.index.pickers.front')" type="color" :value="frontSelection?.image ?? null" :error="showPickerErrors && !frontSelection" :error-message="t('configurator.index.errors.front')" @click="onPickerClick(PICKER_KEY_FRONT)" />
+        <BasePicker :label="t('configurator.index.pickers.sidePanel')" type="color" :value="sideSelection?.image ?? null" :error="showPickerErrors && !sideSelection" :error-message="t('configurator.index.errors.sidePanel')" @click="onPickerClick(PICKER_KEY_SIDE_PANEL)" />
+        <BasePicker :label="t('configurator.index.pickers.plinth')" type="color" :value="plinthSelection?.image ?? null" :error="showPickerErrors && !plinthSelection" :error-message="t('configurator.index.errors.plinth')" @click="onPickerClick(PICKER_KEY_PLINTH)" />
+        <BasePicker
+          :label="t('configurator.index.pickers.handle')"
+          type="image"
+          :value="handleSelection?.image ? { src: handleSelection.image, alt: handleSelection.title } : null"
+          :error="showPickerErrors && !handleSelection"
+          :error-message="t('configurator.index.errors.handle')"
+          @click="onPickerClick(PICKER_KEY_HANDLE)"
+        />
+      </div>
+    </div>
+  </BaseConfiguratorTemplate>
 
-    <PanelsPlinth v-model="plinthPanelOpen" v-model:selection="plinthSelection" />
-    <PanelsFront v-model="frontPanelOpen" v-model:selection="frontSelection" />
-    <PanelsSide v-model="sidePanelOpen" v-model:selection="sideSelection" />
-    <PanelsHandle v-model="handlePanelOpen" v-model:selection="handleSelection" />
-  </div>
+  <PanelsPlinth v-model="plinthPanelOpen" v-model:selection="plinthSelection" />
+  <PanelsFront v-model="frontPanelOpen" v-model:selection="frontSelection" />
+  <PanelsSide v-model="sidePanelOpen" v-model:selection="sideSelection" />
+  <PanelsHandle v-model="handlePanelOpen" v-model:selection="handleSelection" />
 </template>
 
 <script setup lang="ts">
@@ -41,8 +38,9 @@ import { useRouter } from 'vue-router';
 import { useCabinetViewer } from '../../composables/useCabinetViewer';
 import { useConfiguratorState } from '../../composables/useConfiguratorState';
 import { useToast } from '../../composables/useToast';
-import { PICKER_KEY_PLINTH, PICKER_KEY_FRONT, PICKER_KEY_SIDE_PANEL, PICKER_KEY_HANDLE, PICKER_LABEL_PLINTH, PICKER_LABEL_FRONT, PICKER_LABEL_SIDE_PANEL, PICKER_LABEL_HANDLE } from '../../constants/configurator';
+import { PICKER_KEY_PLINTH, PICKER_KEY_FRONT, PICKER_KEY_SIDE_PANEL, PICKER_KEY_HANDLE } from '../../constants/configurator';
 
+const { t } = useI18n();
 const router = useRouter();
 const canvasContainerRef = ref<HTMLElement | null>(null);
 const showPickerErrors = ref(false);
@@ -57,21 +55,20 @@ const { modelLoaded } = useCabinetViewer(canvasContainerRef, {
 });
 
 function onBack() {
-  // TODO: go to previous step or navigate back
-  window.history.back();
+  router.replace('/');
 }
 
 function onNext() {
   const missing: string[] = [];
-  if (!frontSelection.value) missing.push('Front color');
-  if (!sideSelection.value) missing.push('Side panel');
-  if (!plinthSelection.value) missing.push('Plinth color');
-  if (!handleSelection.value) missing.push('Handle type');
+  if (!frontSelection.value) missing.push(t('configurator.index.validation.missingFront'));
+  if (!sideSelection.value) missing.push(t('configurator.index.validation.missingSidePanel'));
+  if (!plinthSelection.value) missing.push(t('configurator.index.validation.missingPlinth'));
+  if (!handleSelection.value) missing.push(t('configurator.index.validation.missingHandle'));
 
   if (missing.length > 0) {
     showPickerErrors.value = true;
-    toast.warning(`Please fill in the missing options: ${missing.join(', ')}.`, {
-      title: 'Missing required fields',
+    toast.warning(t('configurator.index.validation.toastMessage', { list: missing.join(', ') }), {
+      title: t('configurator.index.validation.toastTitle'),
     });
     return;
   }
@@ -81,34 +78,6 @@ function onNext() {
 </script>
 
 <style scoped>
-.configurator-page {
-  background-color: var(--color-surface);
-  padding-top: calc(var(--navbar-height) + 1.5rem);
-  padding-bottom: var(--intro-padding-y);
-  padding-left: var(--intro-padding-x);
-  padding-right: var(--intro-padding-x);
-}
-
-.configurator-header {
-  padding: 0 0 2rem;
-  text-align: center;
-}
-
-.configurator-header__title {
-  margin-bottom: 0.75rem;
-}
-
-.configurator-header__description {
-  max-width: 560px;
-  margin-left: auto;
-  margin-right: auto;
-  margin-bottom: 0;
-}
-
-.configurator-main {
-  padding: 0;
-}
-
 .configurator-main__inner {
   max-width: var(--intro-max-width);
   margin: 0 auto;
@@ -205,45 +174,13 @@ function onNext() {
   }
 }
 
-.configurator-main__hint {
-  font-family: var(--font-sans);
-  font-size: 13px;
-  color: var(--color-text-muted);
-  margin: 0;
-}
-
 .configurator-main__pickers {
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
 }
 
-.configurator-main__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--picker-border);
-}
-
 @media (min-width: 768px) {
-  .configurator-page {
-    padding-top: calc(var(--navbar-height-desktop) + 2rem);
-    padding-bottom: var(--intro-padding-y-desktop);
-    padding-left: var(--intro-padding-x-desktop);
-    padding-right: var(--intro-padding-x-desktop);
-  }
-
-  .configurator-header {
-    padding: 0 0 3rem;
-  }
-
-  .configurator-main {
-    padding: 0;
-  }
-
   .configurator-main__inner {
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
@@ -261,13 +198,6 @@ function onNext() {
   .configurator-main__pickers {
     order: 2;
     gap: 1rem;
-  }
-
-  .configurator-main__actions {
-    order: 3;
-    grid-column: 1 / -1;
-    margin-top: 2.5rem;
-    padding-top: 2.5rem;
   }
 }
 </style>

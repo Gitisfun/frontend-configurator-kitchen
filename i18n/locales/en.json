@@ -1,0 +1,66 @@
+{
+  "common": {
+    "locale": {
+      "ariaLabel": "Choose language",
+      "nl": "NL",
+      "en": "EN"
+    }
+  },
+  "configurator": {
+    "index": {
+      "title": "Customize your cabinet",
+      "description": "Select colors and handle styles to create your perfect kitchen piece.",
+      "pickers": {
+        "front": "Front color",
+        "sidePanel": "Side panel",
+        "plinth": "Plinth color",
+        "handle": "Handle type"
+      },
+      "errors": {
+        "front": "Please select a front color",
+        "sidePanel": "Please select a side panel",
+        "plinth": "Please select a plinth color",
+        "handle": "Please select a handle type"
+      },
+      "validation": {
+        "missingFront": "front color",
+        "missingSidePanel": "side panel",
+        "missingPlinth": "plinth color",
+        "missingHandle": "handle type",
+        "toastTitle": "Missing required fields",
+        "toastMessage": "Please fill in the missing options: {list}."
+      },
+      "actions": {
+        "back": "Back",
+        "next": "Next"
+      }
+    },
+    "type": {
+      "backToDesign": "back to design",
+      "title": "select cabinets",
+      "description": "select the cabinet group you want to start with",
+      "loadError": "Failed to load cabinet groups. Please refresh the page.",
+      "loadingAriaLabel": "Loading cabinet groups",
+      "empty": "No cabinet groups are available yet.",
+      "radioGroupAriaLabel": "Cabinet group",
+      "design": {
+        "title": "Your design",
+        "front": "Front",
+        "handle": "Handle/knob",
+        "cabinetColor": "Cabinet color",
+        "plinth": "Plinth color",
+        "change": "change"
+      },
+      "validation": {
+        "selectGroup": "Select a cabinet group to continue."
+      }
+    },
+    "subcategories": {
+      "loadingAriaLabel": "Loading catalog",
+      "backToCabinets": "back to cabinets",
+      "loadError": "Could not load subcategories, products, or series. Please try again.",
+      "empty": "No subcategories, products, or series for this category.",
+      "defaultCategoryTitle": "Cabinets"
+    }
+  }
+}

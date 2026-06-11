@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { usePlinths, type PlinthOption } from '../../composables/usePlinths';
+import { usePlinths, type PlinthOption } from '../../composables/api/usePlinths';
 
 interface Props {
   modelValue: boolean;

@@ -7,6 +7,7 @@
       <NuxtLink to="/" class="nav-link">Home</NuxtLink>
       <NuxtLink to="/about" class="nav-link">About</NuxtLink>
       <NuxtLink to="/contact" class="nav-link">Contact</NuxtLink>
+      <BaseLocaleSwitcher variant="navbar" />
       <BaseThemeSwitcher />
       <BaseCart :item-count="cartStore.itemCount" :total="cartStore.total" :items="cartStore.itemsForDropdown" />
     </div>
@@ -14,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue';
+import { ref, computed, onMounted, onUnmounted, type CSSProperties } from 'vue';
 import { useCartStore } from '../../../stores/cart';
 
 interface Props {
@@ -36,11 +37,11 @@ function updateScroll() {
   scrollProgress.value = Math.min(scrollTop / SCROLL_THRESHOLD, 1);
 }
 
-const navbarStyle = computed(() => {
+const navbarStyle = computed((): CSSProperties => {
   const p = props.lightPage ? 1 : scrollProgress.value;
   return {
     '--navbar-scroll-progress': p,
-  } as Record<string, string>;
+  };
 });
 
 const scrolled = computed(() => (props.lightPage ? true : scrollProgress.value > 0.5));
@@ -154,6 +155,52 @@ onUnmounted(() => {
   width: 100%;
 }
 
+.nav-links :deep(.locale-switcher) {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.nav-links :deep(.locale-switcher__btn--navbar) {
+  font-family: var(--font-sans);
+  font-size: var(--navbar-link-font-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--navbar-link-color-transparent, #fff);
+  text-decoration: none;
+  letter-spacing: var(--letter-spacing-wide);
+  position: relative;
+  padding: 0.25rem 0;
+  transition: color 0.3s ease;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.navbar--scrolled .nav-links :deep(.locale-switcher__btn--navbar) {
+  color: var(--navbar-link-color);
+}
+
+.nav-links :deep(.locale-switcher__btn--navbar::after) {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: var(--navbar-link-underline-height);
+  background-color: var(--navbar-link-color-active);
+  transition: width 0.3s ease;
+}
+
+.nav-links :deep(.locale-switcher__btn--navbar:hover),
+.nav-links :deep(.locale-switcher__btn--navbar.locale-switcher__btn--active) {
+  color: var(--navbar-link-color-active);
+}
+
+.nav-links :deep(.locale-switcher__btn--navbar:hover::after),
+.nav-links :deep(.locale-switcher__btn--navbar.locale-switcher__btn--active::after) {
+  width: 100%;
+}
+
 @media (min-width: 768px) {
   .navbar {
     padding: var(--navbar-padding-y-desktop) var(--navbar-padding-x-desktop);
@@ -161,6 +208,14 @@ onUnmounted(() => {
 
   .nav-link {
     font-size: var(--navbar-link-font-size-desktop);
+  }
+
+  .nav-links :deep(.locale-switcher__btn--navbar) {
+    font-size: var(--navbar-link-font-size-desktop);
+  }
+
+  .nav-links :deep(.locale-switcher) {
+    gap: 1rem;
   }
 
   .nav-links {

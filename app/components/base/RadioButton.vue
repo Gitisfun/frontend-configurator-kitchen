@@ -42,11 +42,6 @@ const emit = defineEmits<{
   font-family: var(--font-sans);
   font-size: var(--paragraph-size-small);
   color: var(--color-text-primary);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
-}
-
-.radio:hover {
-  background-color: var(--color-surface-hover);
 }
 
 .radio__input {
@@ -61,8 +56,5 @@ const emit = defineEmits<{
 .radio:has(.radio__input:disabled) {
   opacity: 0.6;
   cursor: not-allowed;
-}
-.radio:has(.radio__input:disabled):hover {
-  background-color: transparent;
 }
 </style>

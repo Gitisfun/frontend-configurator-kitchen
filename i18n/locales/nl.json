@@ -1,0 +1,66 @@
+{
+  "common": {
+    "locale": {
+      "ariaLabel": "Taal kiezen",
+      "nl": "NL",
+      "en": "EN"
+    }
+  },
+  "configurator": {
+    "index": {
+      "title": "Stel je kast samen",
+      "description": "Kies kleuren en handgreep om jouw perfecte keukenstuk samen te stellen.",
+      "pickers": {
+        "front": "Frontkleur",
+        "sidePanel": "Zijpaneel",
+        "plinth": "Plintkleur",
+        "handle": "Handgreeptype"
+      },
+      "errors": {
+        "front": "Selecteer een frontkleur",
+        "sidePanel": "Selecteer een zijpaneel",
+        "plinth": "Selecteer een plintkleur",
+        "handle": "Selecteer een handgreeptype"
+      },
+      "validation": {
+        "missingFront": "frontkleur",
+        "missingSidePanel": "zijpaneel",
+        "missingPlinth": "plintkleur",
+        "missingHandle": "handgreeptype",
+        "toastTitle": "Verplichte velden ontbreken",
+        "toastMessage": "Vul de ontbrekende opties in: {list}."
+      },
+      "actions": {
+        "back": "Terug",
+        "next": "Volgende"
+      }
+    },
+    "type": {
+      "backToDesign": "terug naar het ontwerp",
+      "title": "selecteer kasten",
+      "description": "selecteer hier de kast groep waar je mee wil beginnen",
+      "loadError": "Kastgroepen laden is mislukt. Probeer de pagina te vernieuwen.",
+      "loadingAriaLabel": "Kastgroepen laden",
+      "empty": "Er zijn nog geen kastgroepen beschikbaar.",
+      "radioGroupAriaLabel": "Kast groep",
+      "design": {
+        "title": "Jouw ontwerp",
+        "front": "Front",
+        "handle": "Greep/knop",
+        "cabinetColor": "Kastkleur",
+        "plinth": "Plintkleur",
+        "change": "wijzigen"
+      },
+      "validation": {
+        "selectGroup": "Selecteer een kast groep om verder te gaan."
+      }
+    },
+    "subcategories": {
+      "loadingAriaLabel": "Catalogus laden",
+      "backToCabinets": "terug naar kasten",
+      "loadError": "Kon subcategorieën, producten en series niet laden. Probeer het opnieuw.",
+      "empty": "Geen subcategorieën, producten of series voor deze categorie.",
+      "defaultCategoryTitle": "Kasten"
+    }
+  }
+}

@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { useHandles, type HandleOption } from '../../composables/useHandles';
+import { useHandles, type HandleOption } from '../../composables/api/useHandles';
 
 interface Props {
   modelValue: boolean;

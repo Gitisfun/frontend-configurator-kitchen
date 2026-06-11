@@ -1,56 +1,76 @@
 <template>
-  <div class="configurator-page configurator-type-page">
-    <NuxtLink to="/configurator" class="configurator-type-page__back-link"> terug naar het ontwerp </NuxtLink>
+  <BaseConfiguratorTemplate
+    class="configurator-type-page"
+    :title="t('configurator.type.title')"
+    :description="t('configurator.type.description')"
+    back-to="/configurator"
+    :back-label="t('configurator.index.actions.back')"
+    :next-label="t('configurator.index.actions.next')"
+    @next="onNext"
+  >
+    <template #before>
+      <NuxtLink to="/configurator" class="configurator-type-page__back-link">
+        {{ t('configurator.type.backToDesign') }}
+      </NuxtLink>
+    </template>
 
-    <section class="configurator-main">
-      <div class="configurator-main__inner">
-        <div class="configurator-type-page__content">
-          <BaseHeader size="big" as="h1" align="left" color="primary" class="configurator-type-page__title"> selecteer kasten </BaseHeader>
-          <BaseParagraph size="medium" align="left" color="primary" class="configurator-type-page__description"> selecteer hier de kast groep waar je mee wil beginnen </BaseParagraph>
-
-          <p v-if="categoriesError" class="configurator-type-page__error">Kastgroepen laden is mislukt. Probeer de pagina te vernieuwen.</p>
-          <div v-else-if="categoriesPending" class="configurator-type-page__radios configurator-type-page__radios--skeleton" aria-busy="true" aria-label="Kastgroepen laden">
-            <div v-for="n in 3" :key="n" class="configurator-type-page__radio-skeleton" />
-          </div>
-          <p v-else-if="typeOptions.length === 0" class="configurator-type-page__empty">Er zijn nog geen kastgroepen beschikbaar.</p>
-          <div v-else class="configurator-type-page__radios" role="radiogroup" aria-label="Kast groep">
-            <BaseRadioButton v-for="option in typeOptions" :key="option.id" v-model="selectedTypeValue" :name="radioGroupName" :value="option.value" :label="option.label" @hover="onRadioHover" @hover-end="onRadioHoverEnd" />
-          </div>
-
-          <div class="configurator-type-page__design">
-            <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-type-page__design-title"> Jouw ontwerp </BaseHeader>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Front: {{ frontSummary }} </BaseParagraph>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Greep/knop: {{ handleSummary }} </BaseParagraph>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Kastkleur: {{ sideSummary }}</BaseParagraph>
-            <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail"> Plintkleur: {{ plinthSummary }} </BaseParagraph>
-            <NuxtLink to="/configurator" class="configurator-type-page__change-link">wijzigen</NuxtLink>
-          </div>
+    <div class="configurator-main__inner">
+      <div class="configurator-type-page__content">
+        <p v-if="categoriesError" class="configurator-type-page__error">{{ t('configurator.type.loadError') }}</p>
+        <div
+          v-else-if="categoriesPending"
+          class="configurator-type-page__radios configurator-type-page__radios--skeleton"
+          aria-busy="true"
+          :aria-label="t('configurator.type.loadingAriaLabel')"
+        >
+          <div v-for="n in 3" :key="n" class="configurator-type-page__radio-skeleton" />
+        </div>
+        <p v-else-if="typeOptions.length === 0" class="configurator-type-page__empty">{{ t('configurator.type.empty') }}</p>
+        <div v-else class="configurator-type-page__radios" role="radiogroup" :aria-label="t('configurator.type.radioGroupAriaLabel')">
+          <BaseRadioButton v-for="option in typeOptions" :key="option.id" v-model="selectedTypeValue" :name="radioGroupName" :value="option.value" :label="option.label" @hover="onRadioHover" @hover-end="onRadioHoverEnd" />
         </div>
 
-        <div class="configurator-type-page__media">
-          <div class="configurator-type-page__canvas-wrap">
-            <div ref="canvasContainerRef" class="configurator-type-page__canvas-host" :class="{ 'configurator-type-page__canvas-host--ready': modelLoaded }" aria-hidden="true" />
-            <div v-if="!modelLoaded" class="configurator-type-page__canvas-loading" role="status" aria-live="polite">
-              <span class="configurator-type-page__spinner" />
-            </div>
-          </div>
+        <div class="configurator-type-page__design">
+          <BaseHeader size="small" as="h2" align="left" color="primary" class="configurator-type-page__design-title">
+            {{ t('configurator.type.design.title') }}
+          </BaseHeader>
+          <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
+            {{ t('configurator.type.design.front') }}: {{ frontSummary }}
+          </BaseParagraph>
+          <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
+            {{ t('configurator.type.design.handle') }}: {{ handleSummary }}
+          </BaseParagraph>
+          <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
+            {{ t('configurator.type.design.cabinetColor') }}: {{ sideSummary }}
+          </BaseParagraph>
+          <BaseParagraph size="small" align="left" color="primary" class="configurator-type-page__design-detail">
+            {{ t('configurator.type.design.plinth') }}: {{ plinthSummary }}
+          </BaseParagraph>
+          <NuxtLink to="/configurator" class="configurator-type-page__change-link">{{ t('configurator.type.design.change') }}</NuxtLink>
         </div>
       </div>
 
-      <div class="configurator-main__actions">
-        <BaseButtons back-label="Terug" next-label="Volgende" @back="onBack" @next="onNext" />
+      <div class="configurator-type-page__media">
+        <div class="configurator-type-page__canvas-wrap">
+          <div ref="canvasContainerRef" class="configurator-type-page__canvas-host" :class="{ 'configurator-type-page__canvas-host--ready': modelLoaded }" aria-hidden="true" />
+          <div v-if="!modelLoaded" class="configurator-type-page__canvas-loading" role="status" aria-live="polite">
+            <span class="configurator-type-page__spinner" />
+          </div>
+        </div>
       </div>
-    </section>
-  </div>
+    </div>
+  </BaseConfiguratorTemplate>
 </template>
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useConfiguratorState } from '../../composables/useConfiguratorState';
-import { useCategories } from '../../composables/useCategories';
+import { useCategories } from '../../composables/api/useCategories';
 import { useModelViewer } from '../../composables/useModelViewer';
 import { useToast } from '../../composables/useToast';
+
+const { t } = useI18n();
 
 const route = useRoute();
 const router = useRouter();
@@ -60,8 +80,8 @@ const canvasContainerRef = ref<HTMLElement | null>(null);
 const { plinthSelection, frontSelection, sideSelection, handleSelection } = useConfiguratorState();
 
 function selectionTitle(sel: { title?: string | null } | null | undefined): string {
-  const t = sel?.title?.trim();
-  return t ? t : '—';
+  const title = sel?.title?.trim();
+  return title ? title : '—';
 }
 
 const frontSummary = computed(() => selectionTitle(frontSelection.value));
@@ -114,15 +134,11 @@ watch(
   { immediate: true },
 );
 
-function onBack() {
-  window.history.back();
-}
-
 function onNext() {
   const value = selectedTypeValue.value;
   const option = typeOptions.value.find((o) => o.value === value);
   if (!option || categoriesError.value) {
-    toast.warning('Selecteer een kast groep om verder te gaan.');
+    toast.warning(t('configurator.type.validation.selectGroup'));
     return;
   }
   router.replace({ path: '/configurator/type', query: { type: option.value } });
@@ -134,19 +150,6 @@ function onNext() {
 </script>
 
 <style scoped>
-.configurator-type-page {
-  position: relative;
-  background-color: var(--color-surface);
-  padding-top: calc(var(--navbar-height) + 1.5rem);
-  padding-bottom: var(--intro-padding-y);
-  padding-left: var(--intro-padding-x);
-  padding-right: var(--intro-padding-x);
-}
-
-.configurator-main {
-  padding: 0;
-}
-
 .configurator-main__inner {
   max-width: var(--intro-max-width);
   margin: 0 auto;
@@ -174,14 +177,6 @@ function onNext() {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
-}
-
-.configurator-type-page__title {
-  margin-bottom: 0;
-}
-
-.configurator-type-page__description {
-  margin-top: 0;
 }
 
 .configurator-type-page__radios {
@@ -330,24 +325,7 @@ function onNext() {
   }
 }
 
-.configurator-main__actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--picker-border);
-}
-
 @media (min-width: 768px) {
-  .configurator-type-page {
-    padding-top: calc(var(--navbar-height-desktop) + 2rem);
-    padding-bottom: var(--intro-padding-y-desktop);
-    padding-left: var(--intro-padding-x-desktop);
-    padding-right: var(--intro-padding-x-desktop);
-  }
-
   .configurator-main__inner {
     grid-template-columns: 1fr 1fr;
     gap: 3rem;
@@ -361,11 +339,6 @@ function onNext() {
   .configurator-type-page__canvas-wrap {
     min-height: 460px;
     max-width: 100%;
-  }
-
-  .configurator-main__actions {
-    margin-top: 2.5rem;
-    padding-top: 2.5rem;
   }
 }
 </style>

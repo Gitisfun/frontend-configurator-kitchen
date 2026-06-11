@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { useFronts, type FrontOption } from '../../composables/useFronts';
+import { useFronts, type FrontOption } from '../../composables/api/useFronts';
 
 interface Props {
   modelValue: boolean;

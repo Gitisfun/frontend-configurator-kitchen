@@ -3,11 +3,11 @@ import { ref, watch, onMounted, onUnmounted, nextTick } from 'vue';
 import type { Scene, Object3D, Mesh, MeshStandardMaterial, Material, Group, Texture } from 'three';
 import { getCachedGltf } from './useGlbCache';
 
-/** Selections with at least an image string for the 3D material */
+/** Selections with an optional image URL or hex swatch for the 3D material */
 export interface ModelViewerSelections {
-  plinthSelection: Ref<{ image: string } | null>;
-  frontSelection: Ref<{ image: string } | null>;
-  sideSelection: Ref<{ image: string } | null>;
+  plinthSelection: Ref<{ image: string | null } | null>;
+  frontSelection: Ref<{ image: string | null } | null>;
+  sideSelection: Ref<{ image: string | null } | null>;
 }
 
 function isImageUrl(value: string): boolean {

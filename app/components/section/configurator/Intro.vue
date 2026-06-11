@@ -14,7 +14,7 @@ function goToConfigurator(value: string) {
 </script>
 
 <template>
-  <section class="intro">
+  <section id="configurator-intro" class="intro">
     <div class="intro__inner">
       <div class="intro__content">
         <BaseHeader size="big" as="h1" align="left" color="primary"> stel zelf je keuken samen </BaseHeader>
@@ -46,6 +46,7 @@ function goToConfigurator(value: string) {
 .intro {
   background-color: var(--color-surface);
   padding: var(--section-padding-y) var(--intro-padding-x);
+  scroll-margin-top: 80px;
 }
 
 .intro__inner {

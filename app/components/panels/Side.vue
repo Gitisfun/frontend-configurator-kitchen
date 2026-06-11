@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts">
-import { useBacks, type BackOption } from '../../composables/useBacks';
+import { useBacks, type BackOption } from '../../composables/api/useBacks';
 
 interface Props {
   modelValue: boolean;

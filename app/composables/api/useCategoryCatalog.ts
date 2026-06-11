@@ -1,7 +1,11 @@
 import { computed, type Ref } from 'vue';
-import { CATEGORY_CATALOG_PATH, defaultCategoryCatalogResponse, type CategoryCatalogResponse } from '../services/categoryCatalog';
+import {
+  defaultCategoryCatalogResponse,
+  fetchCategoryCatalog,
+  type CategoryCatalogResponse,
+} from '../../api/categoryCatalog';
 
-export type { CategoryCatalogResponse, CategoryCatalogItem } from '../services/categoryCatalog';
+export type { CategoryCatalogResponse, CategoryCatalogItem } from '../../api/categoryCatalog';
 
 export function useCategoryCatalog(categoryDocumentId: Ref<string>, parentSubcategoryDocumentId: Ref<string>) {
   const { data, pending, error, refresh } = useAsyncData(
@@ -10,13 +14,7 @@ export function useCategoryCatalog(categoryDocumentId: Ref<string>, parentSubcat
     () => {
       const c = categoryDocumentId.value.trim();
       if (!c) return Promise.resolve(defaultCategoryCatalogResponse());
-      const p = parentSubcategoryDocumentId.value.trim();
-      return $fetch<CategoryCatalogResponse>(CATEGORY_CATALOG_PATH, {
-        query: {
-          category: c,
-          ...(p ? { parentSubcategory: p } : {}),
-        },
-      });
+      return fetchCategoryCatalog(c, parentSubcategoryDocumentId.value);
     },
     {
       watch: [categoryDocumentId, parentSubcategoryDocumentId],
@@ -25,5 +23,8 @@ export function useCategoryCatalog(categoryDocumentId: Ref<string>, parentSubcat
 
   const catalog = computed(() => data.value ?? defaultCategoryCatalogResponse());
 
-  return { catalog, pending, error, refresh };
+  /** Subcategories first, then catalog products, then cabinet series (same order as the subcategories step UI). */
+  const catalogItems = computed(() => [...catalog.value.subcategories, ...catalog.value.products, ...catalog.value.series]);
+
+  return { catalog, catalogItems, pending, error, refresh };
 }
